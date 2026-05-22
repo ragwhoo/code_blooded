@@ -1,0 +1,21 @@
+honeypots:
+  hidden_routes:
+    - /admin/panel
+    - /api/internal/stats
+    - /wp-admin
+    - /backup
+    - /.env
+  fake_endpoints:
+    - /api/v2/salaries
+    - /api/internal/companies
+    - /graphql
+  invisible_links:
+    - /privacy-policy
+    - /terms
+  js_traps:
+    - /tracking/pixel.gif
+    - /analytics/collect
+  dynamic_honeypots:
+    enabled: true
+    rotation_interval_minutes: 10
+    pool_size: 20

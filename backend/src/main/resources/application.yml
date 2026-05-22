@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 2000ms
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    time-zone: UTC
+
+logging:
+  level:
+    com.botguard: DEBUG
+    org.springframework.web: INFO
+
+botguard:
+  mitigation:
+    soft-throttle-threshold: 30
+    delay-threshold: 60
+    rate-limit-threshold: 80
+    block-threshold: 90
+  reputation:
+    decay-rate: 0.95
+    decay-interval-minutes: 5

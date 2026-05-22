@@ -1,0 +1,41 @@
+rules:
+  - name: rapid_requests
+    weight: 20
+    description: "Requests per minute exceeds threshold"
+    enabled: true
+    condition: "rpm > 30"
+  - name: sequential_traversal
+    weight: 25
+    description: "Sequential URL pattern detected"
+    enabled: true
+    condition: "sequentialRatio > 0.6"
+  - name: no_assets
+    weight: 15
+    description: "No CSS/JS/image assets requested"
+    enabled: true
+    condition: "assetRatio < 0.05"
+  - name: honeypot_hit
+    weight: 70
+    description: "Honeypot/trap route accessed"
+    enabled: true
+    condition: "honeypotCount > 0"
+  - name: low_entropy
+    weight: 15
+    description: "Navigation entropy below threshold"
+    enabled: true
+    condition: "navigationEntropy < 1.5"
+  - name: high_salary_ratio
+    weight: 20
+    description: "High proportion of salary page hits"
+    enabled: true
+    condition: "salaryPageRatio > 0.5"
+  - name: low_interval_variance
+    weight: 25
+    description: "Request intervals are too regular"
+    enabled: true
+    condition: "intervalVariance < 100"
+  - name: repeated_pattern
+    weight: 15
+    description: "Repeated URL access pattern detected"
+    enabled: true
+    condition: "repeatedPatternScore > 0.7"
