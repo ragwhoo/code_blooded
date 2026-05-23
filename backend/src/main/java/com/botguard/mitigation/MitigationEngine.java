@@ -20,10 +20,10 @@ public class MitigationEngine {
 
     private final StringRedisTemplate redis;
 
-    private static final double THROTTLE_THRESHOLD = 30;
-    private static final double CHALLENGE_THRESHOLD = 60;
-    private static final double BLOCK_THRESHOLD = 80;
-    private static final double BAN_THRESHOLD = 90;
+    private static final double THROTTLE_THRESHOLD = 70;
+    private static final double CHALLENGE_THRESHOLD = 80;
+    private static final double BLOCK_THRESHOLD = 90;
+    private static final double BAN_THRESHOLD = 99;
 
     private static final long IP_BAN_TTL_SECONDS = 86400;
     private static final long SESSION_TTL_SECONDS = 3600;
