@@ -8,7 +8,7 @@ const riskConfig = {
 export default function RiskBadge({ score, size = 'md' }) {
   const level = score >= 80 ? 'critical' : score >= 60 ? 'high' : score >= 30 ? 'medium' : 'low'
   const config = riskConfig[level]
-  const sizeClasses = size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
+  const sizeClasses = size === 'xs' ? 'px-1.5 py-0.5 text-[8px]' : size === 'sm' ? 'px-2 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'
 
   return (
     <span

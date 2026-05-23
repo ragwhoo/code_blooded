@@ -1,101 +1,103 @@
 import { useState, useEffect } from 'react'
-import MitigationChart from '../charts/MitigationChart'
-import RiskBadge from '../components/RiskBadge'
-import EventBadge from '../components/EventBadge'
+import { Shield, Activity, Ban, AlertTriangle, Check } from 'lucide-react'
+
+const mitigations = [
+  { id: 1, type: 'ip_block', ip: '198.51.100.45', reason: 'Brute force detected', status: 'active', severity: 'high', timestamp: '2025-01-15T10:30:00Z' },
+  { id: 2, type: 'rate_limit', ip: '203.0.113.22', reason: 'Excessive requests', status: 'active', severity: 'medium', timestamp: '2025-01-15T10:28:00Z' },
+  { id: 3, type: 'challenge', ip: '192.0.2.100', reason: 'Suspicious UA', status: 'resolved', severity: 'low', timestamp: '2025-01-15T10:25:00Z' },
+  { id: 4, type: 'ip_block', ip: '198.51.100.77', reason: 'Known botnet', status: 'active', severity: 'critical', timestamp: '2025-01-15T10:20:00Z' },
+  { id: 5, type: 'rate_limit', ip: '203.0.113.55', reason: 'API abuse', status: 'active', severity: 'medium', timestamp: '2025-01-15T10:18:00Z' },
+  { id: 6, type: 'challenge', ip: '192.0.2.200', reason: 'Headless browser', status: 'resolved', severity: 'low', timestamp: '2025-01-15T10:15:00Z' },
+  { id: 7, type: 'ip_block', ip: '198.51.100.33', reason: 'SQL injection attempt', status: 'active', severity: 'critical', timestamp: '2025-01-15T10:10:00Z' },
+]
+
+const severityColors = {
+  critical: { bg: 'rgba(239,68,68,0.1)', text: '#EF4444' },
+  high: { bg: 'rgba(249,115,22,0.1)', text: '#F97316' },
+  medium: { bg: 'rgba(234,179,8,0.1)', text: '#EAB308' },
+  low: { bg: 'rgba(59,130,246,0.1)', text: '#3B82F6' },
+}
+
+const typeIcons = {
+  ip_block: Ban,
+  rate_limit: Activity,
+  challenge: Shield,
+}
+
+const stats = [
+  { label: 'Active Blocks', value: 4, icon: Ban, color: '#EF4444' },
+  { label: 'Rate Limits', value: 2, icon: Activity, color: '#F97316' },
+  { label: 'Challenges', value: 1, icon: Shield, color: '#3B82F6' },
+  { label: 'Total Today', value: 7, icon: AlertTriangle, color: '#6C63FF' },
+]
 
 export default function MitigationView() {
-  const [events, setEvents] = useState([])
+  const [selectedType, setSelectedType] = useState('all')
 
-  useEffect(() => {
-    fetch('/api/analytics/events?limit=50')
-      .then(r => r.json()).then(setEvents).catch(() => {})
-
-    const interval = setInterval(() => {
-      fetch('/api/analytics/events?limit=50')
-        .then(r => r.json()).then(setEvents).catch(() => {})
-    }, 3000)
-
-    return () => clearInterval(interval)
-  }, [])
-
-  const mitigationEvents = (events || []).filter(e => e.type === 'mitigation')
+  const filtered = selectedType === 'all' ? mitigations : mitigations.filter(m => m.type === selectedType)
 
   return (
-    <div className="fade-in">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Mitigation View</h1>
-        <p className="text-sm font-medium text-text-muted mt-1">Active countermeasures</p>
+    <div className="fade-in pt-6">
+      <div className="mb-7">
+        <h1 className="text-[36px] font-bold text-white tracking-tight leading-none">Mitigations</h1>
+        <p className="text-sm font-medium text-white/50 mt-2">Active defenses & actions taken</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
-        {[
-          { label: 'Active Rules', value: 12, color: 'text-success' },
-          { label: 'Threats Blocked', value: 87, color: 'text-danger' },
-          { label: 'Avg Response', value: '8ms', color: 'text-purple-400' },
-        ].map((item, i) => (
-          <div key={i} className="rounded-3xl p-5 border border-white/[0.06] shadow-2xl" style={{ background: '#171A23' }}>
-            <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider">{item.label}</span>
-            <p className={`text-3xl font-bold text-white mt-2 ${item.color}`}>{item.value}</p>
+      <div className="grid grid-cols-4 gap-5 mb-7">
+        {stats.map((s, i) => (
+          <div key={i} className="rounded-3xl p-5 text-center"
+               style={{ background: 'rgba(255,255,255,0.01)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 32px rgba(0,0,0,0.45)' }}>
+            <s.icon className="w-5 h-5 mx-auto mb-2" style={{ color: s.color }} />
+            <span className="text-[9px] font-bold text-white/35 uppercase tracking-wider">{s.label}</span>
+            <p className="text-2xl font-bold text-white mt-1">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <MitigationChart />
-        <div className="rounded-3xl p-6 border border-white/[0.06] shadow-2xl" style={{ background: '#171A23' }}>
-          <h3 className="text-sm font-bold text-white mb-4 tracking-wide">Mitigation Rules</h3>
-          <div className="space-y-2">
-            {[
-              { name: 'Rate Limiting', status: 'active', threshold: '100/min', action: 'throttle' },
-              { name: 'IP Reputation', status: 'active', threshold: '< 30', action: 'block' },
-              { name: 'Behavioral Analysis', status: 'active', threshold: 'score > 70', action: 'challenge' },
-              { name: 'Honeypot Detection', status: 'active', threshold: 'triggered', action: 'block' },
-              { name: 'Fingerprint Mismatch', status: 'inactive', threshold: 'N/A', action: 'review' },
-            ].map((rule, i) => (
-              <div key={i} className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.04]">
+      <div className="rounded-3xl p-6"
+           style={{ background: 'rgba(255,255,255,0.01)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: '0 8px 32px rgba(0,0,0,0.45)' }}>
+        <div className="flex items-center gap-2 mb-5 flex-wrap">
+          {['all', 'ip_block', 'rate_limit', 'challenge'].map(t => (
+            <button key={t} onClick={() => setSelectedType(t)}
+                    className="px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all"
+                    style={selectedType === t
+                      ? { background: 'rgba(108,99,255,0.15)', color: '#6C63FF', border: '1px solid rgba(108,99,255,0.25)' }
+                      : { background: 'rgba(255,255,255,0.01)', color: 'rgba(255,255,255,0.5)', border: '1px solid transparent' }}>
+              {t === 'all' ? 'All Types' : t.replace('_', ' ')}
+            </button>
+          ))}
+        </div>
+
+        <div className="space-y-2">
+          {filtered.map(m => {
+            const Icon = typeIcons[m.type] || Shield
+            return (
+              <div key={m.id} className="flex items-center justify-between px-4 py-3 rounded-2xl transition-all"
+                   style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
                 <div className="flex items-center gap-3">
-                  <span className={`w-2 h-2 rounded-full ${rule.status === 'active' ? 'bg-success shadow-[0_0_8px_rgba(34,197,94,0.4)]' : 'bg-text-muted'}`} />
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: severityColors[m.severity]?.bg }}>
+                    <Icon className="w-4 h-4" style={{ color: severityColors[m.severity]?.text }} />
+                  </div>
                   <div>
-                    <span className="text-xs font-semibold text-text-secondary">{rule.name}</span>
-                    <span className="text-[10px] text-text-muted ml-2 font-medium">{rule.threshold}</span>
+                    <span className="text-sm font-semibold text-white/50">{m.ip}</span>
+                    <span className="text-[10px] text-white/35 ml-2 font-medium">{m.reason}</span>
                   </div>
                 </div>
-                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                  rule.action === 'block' ? 'bg-red-500/10 text-red-400' :
-                  rule.action === 'throttle' ? 'bg-amber-500/10 text-amber-400' :
-                  rule.action === 'challenge' ? 'bg-purple-500/10 text-purple-400' :
-                  'bg-white/[0.04] text-text-muted'
-                }`}>
-                  {rule.action}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-3xl p-6 border border-white/[0.06] shadow-2xl" style={{ background: '#171A23' }}>
-        <h3 className="text-sm font-bold text-white mb-4 tracking-wide">Mitigation Log</h3>
-        <div className="space-y-2">
-          {mitigationEvents.length === 0 ? (
-            <div className="py-12 text-center">
-              <p className="text-text-muted text-sm font-medium">No mitigation actions recorded yet</p>
-            </div>
-          ) : (
-            mitigationEvents.map((ev, i) => (
-              <div key={i} className="flex items-center justify-between px-4 py-3 rounded-2xl bg-white/[0.02] border border-white/[0.04] slide-in">
                 <div className="flex items-center gap-3">
-                  <EventBadge type={ev.action || 'mitigation'} severity={ev.severity || 'medium'} />
-                  <span className="text-xs font-semibold text-text-secondary">{ev.sessionId ? ev.sessionId.substring(0, 14) + '...' : 'Unknown'}</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  {ev.ipAddress && <span className="text-[10px] font-medium text-text-muted">{ev.ipAddress}</span>}
-                  <RiskBadge score={ev.riskScore} size="sm" />
-                  <span className="text-[10px] font-medium text-text-muted">{ev.timestamp ? new Date(ev.timestamp).toLocaleTimeString() : ''}</span>
+                  <span className="px-2 py-0.5 rounded-lg text-[10px] font-bold" style={{ background: severityColors[m.severity]?.bg, color: severityColors[m.severity]?.text }}>
+                    {m.severity}
+                  </span>
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold"
+                        style={{ background: m.status === 'active' ? 'rgba(34,197,94,0.1)' : 'rgba(255,255,255,0.01)',
+                                 color: m.status === 'active' ? '#22C55E' : 'rgba(255,255,255,0.35)' }}>
+                    {m.status === 'active' ? <Activity className="w-2.5 h-2.5" /> : <Check className="w-2.5 h-2.5" />}
+                    {m.status}
+                  </span>
+                  <span className="text-[10px] font-medium text-white/35">{new Date(m.timestamp).toLocaleTimeString()}</span>
                 </div>
               </div>
-            ))
-          )}
+            )
+          })}
         </div>
       </div>
     </div>
