@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Companies - Levels.fyi Salary Data by Company</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --color-primary-default: #0060b9;
+      --color-primary-medium: #1776d2;
+      --color-primary-light: #e8f0fe;
+      --color-secondary-default: #19a672;
+      --color-text-default: #1a1a2e;
+      --color-text-secondary: #757685;
+      --color-text-muted: #9e9eae;
+      --color-neutral-100: #f5f6f8;
+      --color-neutral-200: #ebe9e9;
+      --color-neutral-300: #d4d4dc;
+      --color-bg: #eff4f9;
+      --color-white: #ffffff;
+      --color-blue-50: #e8f0fe;
+      --color-blue-100: #d2e3fc;
+      --spacing-1: 0.25rem;
+      --spacing-2: 0.5rem;
+      --spacing-3: 0.75rem;
+      --spacing-4: 0.75rem;
+      --spacing-5: 0.75rem;
+      --spacing-6: 1rem;
+      --spacing-7: 1.25rem;
+      --spacing-8: 1.5rem;
+      --spacing-9: 2rem;
+      --spacing-10: 2.5rem;
+      --spacing-12: 3rem;
+      --border-radius-default: 0.5rem;
+      --border-radius-pill: 20rem;
+      --border-radius-circle: 50%;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: linear-gradient(#eff4f9, #fff); color: var(--color-text-default); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--color-primary-default); }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; font-size: inherit; }
+    .top-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+    .top-banner a { color: #64b5f6; text-decoration: underline; }
+    .navbar { background: var(--color-white); border-bottom: 1px solid var(--color-neutral-200); position: sticky; top: 0; z-index: 1000; }
+    .navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 64px; justify-content: space-between; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; color: var(--color-text-default); }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: var(--color-text-secondary); font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text-default); background: var(--color-neutral-100); }
+    .nav-links a.active { color: var(--color-primary-default); background: var(--color-blue-50); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { padding: 8px 16px; border-radius: var(--border-radius-default); font-weight: 600; font-size: 14px; }
+    .nav-btn-outline { border: 1px solid var(--color-neutral-300); color: var(--color-text-default); }
+    .nav-btn-primary { background: var(--color-primary-default); color: #fff; }
+    .nav-btn-ghost { color: var(--color-text-default); }
+    .hamburger { display: none; font-size: 24px; cursor: pointer; }
+
+    .page-header { text-align: center; padding: 40px 24px 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: #273a51; }
+    .page-header p { color: var(--color-text-secondary); margin-top: 6px; }
+
+    .page-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; align-items: center; }
+    .filter-bar input { flex: 1; min-width: 200px; padding: 12px 16px; border: 2px solid var(--color-neutral-300); border-radius: var(--border-radius-pill); font-size: 15px; font-family: inherit; outline: none; }
+    .filter-bar input:focus { border-color: var(--color-primary-default); }
+    .filter-bar select { padding: 12px 16px; border: 2px solid var(--color-neutral-300); border-radius: var(--border-radius-pill); font-size: 14px; font-family: inherit; outline: none; background: #fff; min-width: 160px; }
+    .filter-bar select:focus { border-color: var(--color-primary-default); }
+
+    .companies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .company-card { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 24px; cursor: pointer; transition: box-shadow 0.2s; }
+    .company-card:hover { box-shadow: var(--shadow-md); }
+    .company-card .cc-top { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .company-card .cc-logo { width: 44px; height: 44px; border-radius: 10px; background: var(--color-neutral-100); display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; color: var(--color-primary-default); flex-shrink: 0; }
+    .company-card .cc-name { font-size: 17px; font-weight: 700; }
+    .company-card .cc-industry { font-size: 13px; color: var(--color-text-muted); }
+    .company-card .cc-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; padding-top: 14px; border-top: 1px solid var(--color-neutral-200); }
+    .company-card .cc-stat { text-align: center; }
+    .company-card .cc-stat .val { font-size: 15px; font-weight: 700; color: var(--color-primary-default); }
+    .company-card .cc-stat .lbl { font-size: 11px; color: var(--color-text-muted); }
+
+    .section-title { font-size: 22px; font-weight: 700; margin: 40px 0 20px; }
+
+    .footer { background: #1a1a2e; color: #ccc; padding: 48px 24px 24px; margin-top: 48px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 2fr 2fr 2fr; gap: 32px; }
+    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; margin-bottom: 8px; }
+    .footer-col a:hover { color: #fff; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 12px; }
+    .footer-logo svg { width: 24px; height: 24px; }
+    .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #555; border-radius: var(--border-radius-default); color: #fff; font-size: 13px; font-weight: 600; margin-top: 12px; }
+    .footer-bottom { max-width: 1280px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 13px; color: #666; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .nav-btn-ghost, .nav-right .nav-btn-outline { display: none; }
+      .hamburger { display: block; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .companies-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner"><i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays <a href="#">Read More <i class="fas fa-arrow-right"></i></a></div>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</a>
+      <div class="nav-links">
+        <a href="index.html">Salaries</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="companies.html" class="active">Companies</a>
+        <a href="locations.html">Locations</a>
+        <a href="salaries.html">Titles</a>
+        <a href="calculator.html">Calculator</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+      <button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+      <button class="nav-btn nav-btn-ghost">Sign In</button>
+      <button class="nav-btn nav-btn-primary">Sign Up</button>
+      <span class="hamburger"><i class="fas fa-bars"></i></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Companies</h1>
+  <p>Browse salary data by company — explore compensation across thousands of organizations</p>
+</div>
+
+<div class="page-container">
+  <div class="filter-bar">
+    <input type="text" id="companySearch" placeholder="Search companies..." />
+    <select id="industryFilter">
+      <option value="all">All Industries</option>
+      <option value="tech">Technology</option>
+      <option value="finance">Finance</option>
+      <option value="healthcare">Healthcare</option>
+      <option value="biotech">Biotechnology</option>
+      <option value="retail">Retail</option>
+    </select>
+    <select id="sortFilter">
+      <option value="avg">Sort by Avg. Salary</option>
+      <option value="name">Sort by Name</option>
+      <option value="count">Sort by Count</option>
+    </select>
+  </div>
+
+  <div class="companies-grid" id="companiesGrid"></div>
+
+  <h2 class="section-title">Compare Companies Side-by-Side</h2>
+  <div class="filter-bar">
+    <select id="compareA" style="flex:1;"></select>
+    <select id="compareB" style="flex:1;"></select>
+  </div>
+  <div id="compareTable" style="background:#fff;border:1px solid var(--color-neutral-200);border-radius:var(--border-radius-default);overflow:hidden;"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</div>
+      <p>© 2017-2026 Levels Fyi Inc.</p>
+      <a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Levels.fyi</h4>
+      <a href="index.html">Home</a><a href="#">Job Board</a><a href="#">Compensation</a><a href="calculator.html">Calculator</a><a href="leaderboard.html">Top Paying Companies</a><a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Popular Pages</h4>
+      <a href="salaries.html">Software Engineer Salary</a><a href="#">Data Scientist Salary</a><a href="#">Product Manager Salary</a><a href="#">Business Analyst Salary</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Blog</a><a href="#">Press</a><a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2017-2026 Levels Fyi Inc.</div>
+</footer>
+
+<script>
+const companies = [
+  { name: "Google", industry: "Technology", logo: "G", avg: 387, top: 1800, count: 45230, levels: ["L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10"] },
+  { name: "Meta", industry: "Technology", logo: "M", avg: 402, top: 839, count: 32100, levels: ["IC3", "IC4", "IC5", "IC6", "IC7", "M1", "M2"] },
+  { name: "Amazon", industry: "Technology", logo: "A", avg: 318, top: 790, count: 56800, levels: ["L4", "L5", "L6", "L7", "L8"] },
+  { name: "Microsoft", industry: "Technology", logo: "M", avg: 285, top: 890, count: 28400, levels: ["59","60","61","62","63","64","65","66","67","68"] },
+  { name: "Apple", industry: "Technology", logo: "A", avg: 340, top: 633, count: 22300, levels: ["ICT2","ICT3","ICT4","ICT5","ICT6"] },
+  { name: "Nvidia", industry: "Technology", logo: "N", avg: 394, top: 1100, count: 12400, levels: ["IC3","IC4","IC5","IC6","IC7","IC8"] },
+  { name: "Netflix", industry: "Technology", logo: "N", avg: 521, top: 830, count: 8200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Uber", industry: "Technology", logo: "U", avg: 346, top: 575, count: 15200, levels: ["L4","L5","L6","L7"] },
+  { name: "Stripe", industry: "Technology", logo: "S", avg: 385, top: 665, count: 6800, levels: ["IC2","IC3","IC4","IC5","IC6"] },
+  { name: "Salesforce", industry: "Technology", logo: "S", avg: 270, top: 365, count: 18100, levels: ["AMTS","MTS","SMTS","LMTS","EMTS"] },
+  { name: "Snowflake", industry: "Technology", logo: "S", avg: 430, top: 735, count: 4200, levels: ["IC2","IC3","IC4","IC5","IC6"] },
+  { name: "Databricks", industry: "Technology", logo: "D", avg: 445, top: 780, count: 3600, levels: ["IC3","IC4","IC5","IC6","IC7"] },
+  { name: "Airbnb", industry: "Technology", logo: "A", avg: 378, top: 680, count: 5400, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "LinkedIn", industry: "Technology", logo: "L", avg: 365, top: 620, count: 9800, levels: ["IC3","IC4","IC5","IC6","IC7"] },
+  { name: "Twitter/X", industry: "Technology", logo: "X", avg: 340, top: 590, count: 6200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Pinterest", industry: "Technology", logo: "P", avg: 352, top: 605, count: 4100, levels: ["IC4","IC5","IC6","IC7"] },
+  { name: "Spotify", industry: "Technology", logo: "S", avg: 305, top: 520, count: 5600, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Coinbase", industry: "Finance", logo: "C", avg: 420, top: 720, count: 3200, levels: ["IC4","IC5","IC6","IC7"] },
+  { name: "Robinhood", industry: "Finance", logo: "R", avg: 395, top: 680, count: 2800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Goldman Sachs", industry: "Finance", logo: "G", avg: 230, top: 450, count: 12400, levels: ["Analyst","Associate","VP","SVP","MD"] },
+  { name: "JPMorgan", industry: "Finance", logo: "J", avg: 215, top: 420, count: 15600, levels: ["Analyst","Associate","VP","ED","MD"] },
+  { name: "Palantir", industry: "Technology", logo: "P", avg: 360, top: 650, count: 3800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Tesla", industry: "Technology", logo: "T", avg: 298, top: 520, count: 9400, levels: ["P1","P2","P3","P4","P5"] },
+  { name: "Snap", industry: "Technology", logo: "S", avg: 365, top: 640, count: 4500, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "DoorDash", industry: "Technology", logo: "D", avg: 372, top: 630, count: 5100, levels: ["IC4","IC5","IC6","IC7"] },
+  { name: "Lyft", industry: "Technology", logo: "L", avg: 338, top: 580, count: 4200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Square", industry: "Finance", logo: "S", avg: 345, top: 590, count: 3800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Atlassian", industry: "Technology", logo: "A", avg: 290, top: 480, count: 6200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Twilio", industry: "Technology", logo: "T", avg: 310, top: 535, count: 3400, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Zoom", industry: "Technology", logo: "Z", avg: 325, top: 560, count: 2900, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Dropbox", industry: "Technology", logo: "D", avg: 342, top: 600, count: 3600, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Adobe", industry: "Technology", logo: "A", avg: 290, top: 510, count: 11200, levels: ["IC2","IC3","IC4","IC5","IC6"] },
+  { name: "Intel", industry: "Technology", logo: "I", avg: 245, top: 420, count: 14800, levels: ["IC3","IC4","IC5","IC6","IC7","IC8"] },
+  { name: "AMD", industry: "Technology", logo: "A", avg: 260, top: 450, count: 6200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Qualcomm", industry: "Technology", logo: "Q", avg: 255, top: 430, count: 8400, levels: ["IC3","IC4","IC5","IC6","IC7"] },
+  { name: "IBM", industry: "Technology", logo: "I", avg: 215, top: 380, count: 16200, levels: ["IC3","IC4","IC5","IC6","IC7"] },
+  { name: "Oracle", industry: "Technology", logo: "O", avg: 240, top: 410, count: 19800, levels: ["IC3","IC4","IC5","IC6","IC7"] },
+  { name: "Cisco", industry: "Technology", logo: "C", avg: 235, top: 400, count: 12400, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "SAP", industry: "Technology", logo: "S", avg: 225, top: 390, count: 9800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "VMware", industry: "Technology", logo: "V", avg: 260, top: 445, count: 7200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "ServiceNow", industry: "Technology", logo: "S", avg: 310, top: 540, count: 5600, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Workday", industry: "Technology", logo: "W", avg: 275, top: 470, count: 4800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Splunk", industry: "Technology", logo: "S", avg: 320, top: 555, count: 3200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Datadog", industry: "Technology", logo: "D", avg: 365, top: 620, count: 2800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "MongoDB", industry: "Technology", logo: "M", avg: 350, top: 600, count: 2200, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Cloudflare", industry: "Technology", logo: "C", avg: 320, top: 550, count: 2600, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "Reddit", industry: "Technology", logo: "R", avg: 335, top: 580, count: 1800, levels: ["IC3","IC4","IC5","IC6"] },
+  { name: "TikTok", industry: "Technology", logo: "T", avg: 358, top: 620, count: 6200, levels: ["IC2","IC3","IC4","IC5","IC6"] },
+  { name: "Honeywell", industry: "Manufacturing", logo: "H", avg: 165, top: 280, count: 5400, levels: ["L1","L2","L3","L4","L5"] },
+  { name: "GE", industry: "Manufacturing", logo: "G", avg: 175, top: 300, count: 8200, levels: ["L1","L2","L3","L4","L5","L6"] },
+];
+
+const levelSalaries = {
+  "Google": { "L3": 192000, "L4": 269000, "L5": 367000, "L6": 488000, "L7": 650000, "L8": 897000, "L9": 1200000, "L10": 1800000 },
+  "Meta": { "IC3": 188000, "IC4": 276000, "IC5": 399000, "IC6": 588000, "IC7": 839000, "M1": 428000, "M2": 651000 },
+  "Amazon": { "L4": 159000, "L5": 239000, "L6": 361000, "L7": 540000, "L8": 790000 },
+  "Microsoft": { "59": 121000, "60": 141000, "61": 170000, "62": 212000, "63": 268000, "64": 338000, "65": 432000, "66": 558000, "67": 711000, "68": 890000 },
+  "Apple": { "ICT2": 140000, "ICT3": 200000, "ICT4": 293000, "ICT5": 432000, "ICT6": 633000 },
+  "Nvidia": { "IC3": 176000, "IC4": 258000, "IC5": 381000, "IC6": 540000, "IC7": 780000, "IC8": 1100000 },
+  "Netflix": { "IC3": 275000, "IC4": 400000, "IC5": 580000, "IC6": 830000 },
+  "Stripe": { "IC2": 181000, "IC3": 252000, "IC4": 345000, "IC5": 482000, "IC6": 665000 },
+};
+
+function formatSalary(val) {
+  if (val >= 1000000) return "$" + (val / 1000000).toFixed(1) + "M";
+  return "$" + (val / 1000).toFixed(0) + "K";
+}
+
+function renderCompanies(list) {
+  const grid = document.getElementById('companiesGrid');
+  grid.innerHTML = list.map(c => `
+    <div class="company-card" data-name="${c.name}">
+      <div class="cc-top">
+        <div class="cc-logo">${c.logo}</div>
+        <div><div class="cc-name">${c.name}</div><div class="cc-industry">${c.industry}</div></div>
+      </div>
+      <div class="cc-stats">
+        <div class="cc-stat"><div class="val">${formatSalary(c.avg * 1000)}</div><div class="lbl">Avg. Total</div></div>
+        <div class="cc-stat"><div class="val">${formatSalary(c.top * 1000)}</div><div class="lbl">Top Level</div></div>
+        <div class="cc-stat"><div class="val">${(c.count / 1000).toFixed(0)}K</div><div class="lbl">Salaries</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCompare() {
+  const selA = document.getElementById('compareA');
+  const selB = document.getElementById('compareB');
+  const table = document.getElementById('compareTable');
+  const aName = selA.value;
+  const bName = selB.value;
+  const a = levelSalaries[aName];
+  const b = levelSalaries[bName];
+  if (!a || !b) { table.innerHTML = '<p style="padding:24px;color:var(--color-text-muted);text-align:center;">Select two companies to compare</p>'; return; }
+  const allLevels = [...new Set([...Object.keys(a), ...Object.keys(b)])].sort();
+  let html = `<table style="width:100%;border-collapse:collapse;font-size:14px;">
+    <thead><tr style="background:var(--color-primary-default);color:#fff;">
+      <th style="padding:14px 16px;text-align:left;">Level</th>
+      <th style="padding:14px 16px;text-align:right;">${aName}</th>
+      <th style="padding:14px 16px;text-align:right;">${bName}</th>
+      <th style="padding:14px 16px;text-align:right;">Difference</th>
+    </tr></thead><tbody>`;
+  allLevels.forEach(l => {
+    const sa = a[l] || 0;
+    const sb = b[l] || 0;
+    const diff = sb - sa;
+    const diffStr = diff > 0 ? '+' + formatSalary(diff) : diff < 0 ? formatSalary(diff) : '-';
+    const diffColor = diff > 0 ? '#19a672' : diff < 0 ? '#e74c3c' : 'var(--color-text-muted)';
+    html += `<tr style="border-bottom:1px solid var(--color-neutral-200);">
+      <td style="padding:12px 16px;font-weight:600;">${l}</td>
+      <td style="padding:12px 16px;text-align:right;">${sa ? formatSalary(sa) : '-'}</td>
+      <td style="padding:12px 16px;text-align:right;">${sb ? formatSalary(sb) : '-'}</td>
+      <td style="padding:12px 16px;text-align:right;color:${diffColor};font-weight:600;">${diffStr}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  table.innerHTML = html;
+}
+
+// Populate company selectors
+const cmpNames = companies.map(c => c.name);
+cmpNames.forEach(n => {
+  document.getElementById('compareA').innerHTML += `<option value="${n}">${n}</option>`;
+  document.getElementById('compareB').innerHTML += `<option value="${n}">${n}</option>`;
+});
+document.getElementById('compareA').value = 'Google';
+document.getElementById('compareB').value = 'Meta';
+renderCompare();
+
+document.getElementById('compareA').addEventListener('change', renderCompare);
+document.getElementById('compareB').addEventListener('change', renderCompare);
+
+// Render initial
+renderCompanies(companies);
+
+// Search filter
+document.getElementById('companySearch').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  const ind = document.getElementById('industryFilter').value;
+  const filtered = companies.filter(c => c.name.toLowerCase().includes(q) && (ind === 'all' || c.industry.toLowerCase() === ind));
+  renderCompanies(filtered);
+});
+
+document.getElementById('industryFilter').addEventListener('change', function() {
+  const q = document.getElementById('companySearch').value.toLowerCase();
+  const ind = this.value;
+  const filtered = companies.filter(c => c.name.toLowerCase().includes(q) && (ind === 'all' || c.industry.toLowerCase() === ind));
+  renderCompanies(filtered);
+});
+
+document.getElementById('sortFilter').addEventListener('change', function() {
+  const q = document.getElementById('companySearch').value.toLowerCase();
+  const ind = document.getElementById('industryFilter').value;
+  let filtered = companies.filter(c => c.name.toLowerCase().includes(q) && (ind === 'all' || c.industry.toLowerCase() === ind));
+  if (this.value === 'avg') filtered.sort((a,b) => b.avg - a.avg);
+  else if (this.value === 'name') filtered.sort((a,b) => a.name.localeCompare(b.name));
+  else if (this.value === 'count') filtered.sort((a,b) => b.count - a.count);
+  renderCompanies(filtered);
+});
+</script>
+
+</body>
+</html>

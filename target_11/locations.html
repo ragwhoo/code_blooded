@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salaries by Location - Levels.fyi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --color-primary-default: #0060b9;
+      --color-primary-medium: #1776d2;
+      --color-primary-light: #e8f0fe;
+      --color-secondary-default: #19a672;
+      --color-text-default: #1a1a2e;
+      --color-text-secondary: #757685;
+      --color-text-muted: #9e9eae;
+      --color-neutral-100: #f5f6f8;
+      --color-neutral-200: #ebe9e9;
+      --color-neutral-300: #d4d4dc;
+      --color-bg: #eff4f9;
+      --color-white: #ffffff;
+      --color-blue-50: #e8f0fe;
+      --border-radius-default: 0.5rem;
+      --border-radius-pill: 20rem;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: linear-gradient(#eff4f9, #fff); color: var(--color-text-default); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--color-primary-default); }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; font-size: inherit; }
+    .top-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+    .top-banner a { color: #64b5f6; text-decoration: underline; }
+    .navbar { background: var(--color-white); border-bottom: 1px solid var(--color-neutral-200); position: sticky; top: 0; z-index: 1000; }
+    .navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 64px; justify-content: space-between; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; color: var(--color-text-default); }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: var(--color-text-secondary); font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text-default); background: var(--color-neutral-100); }
+    .nav-links a.active { color: var(--color-primary-default); background: var(--color-blue-50); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { padding: 8px 16px; border-radius: var(--border-radius-default); font-weight: 600; font-size: 14px; }
+    .nav-btn-outline { border: 1px solid var(--color-neutral-300); color: var(--color-text-default); }
+    .nav-btn-primary { background: var(--color-primary-default); color: #fff; }
+    .nav-btn-ghost { color: var(--color-text-default); }
+    .hamburger { display: none; font-size: 24px; cursor: pointer; }
+
+    .page-header { text-align: center; padding: 40px 24px 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: #273a51; }
+    .page-header p { color: var(--color-text-secondary); margin-top: 6px; }
+
+    .page-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    .region-tabs { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 24px; }
+    .region-tab { padding: 10px 20px; border-radius: var(--border-radius-pill); font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--color-text-secondary); transition: all 0.2s; }
+    .region-tab:hover { background: var(--color-neutral-100); }
+    .region-tab.active { background: var(--color-primary-default); color: #fff; font-weight: 600; }
+
+    .city-table { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); overflow: hidden; }
+    .city-table table { width: 100%; border-collapse: collapse; }
+    .city-table th { background: var(--color-neutral-100); padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .city-table td { padding: 16px 18px; border-bottom: 1px solid var(--color-neutral-200); font-size: 14px; }
+    .city-table tr:hover td { background: var(--color-blue-50); }
+    .city-table .rank-num { color: var(--color-text-muted); font-weight: 600; width: 40px; }
+    .city-table .loc-name { font-weight: 700; }
+    .city-table .loc-count { color: var(--color-text-muted); font-size: 13px; }
+    .city-table .salary-col { font-weight: 700; color: var(--color-primary-default); text-align: right; }
+    .city-table .salary-bar { width: 120px; padding: 0; }
+    .city-table .bar-bg { height: 8px; background: var(--color-neutral-200); border-radius: 4px; overflow: hidden; }
+    .city-table .bar-fill { height: 100%; background: var(--color-primary-default); border-radius: 4px; }
+
+    .heatmap-section { margin-top: 40px; }
+    .heatmap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+    .heatmap-cell { padding: 16px; border-radius: var(--border-radius-default); text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; transition: transform 0.15s; }
+    .heatmap-cell:hover { transform: scale(1.05); }
+    .heatmap-cell .hm-salary { font-size: 15px; font-weight: 700; margin-top: 4px; }
+
+    .footer { background: #1a1a2e; color: #ccc; padding: 48px 24px 24px; margin-top: 48px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 2fr 2fr 2fr; gap: 32px; }
+    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; margin-bottom: 8px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 12px; }
+    .footer-logo svg { width: 24px; height: 24px; }
+    .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #555; border-radius: var(--border-radius-default); color: #fff; font-size: 13px; font-weight: 600; margin-top: 12px; }
+    .footer-bottom { max-width: 1280px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 13px; color: #666; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .nav-btn-ghost, .nav-right .nav-btn-outline { display: none; }
+      .hamburger { display: block; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner"><i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays <a href="#">Read More <i class="fas fa-arrow-right"></i></a></div>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</a>
+      <div class="nav-links">
+        <a href="index.html">Salaries</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="companies.html">Companies</a>
+        <a href="locations.html" class="active">Locations</a>
+        <a href="salaries.html">Titles</a>
+        <a href="calculator.html">Calculator</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+      <button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+      <button class="nav-btn nav-btn-ghost">Sign In</button>
+      <button class="nav-btn nav-btn-primary">Sign Up</button>
+      <span class="hamburger"><i class="fas fa-bars"></i></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Salaries by Location</h1>
+  <p>Explore compensation data across cities, states, and countries</p>
+</div>
+
+<div class="page-container">
+  <div class="region-tabs" id="regionTabs">
+    <button class="region-tab active" data-region="us">United States</button>
+    <button class="region-tab" data-region="canada">Canada</button>
+    <button class="region-tab" data-region="uk">United Kingdom</button>
+    <button class="region-tab" data-region="eu">Europe</button>
+    <button class="region-tab" data-region="asia">Asia-Pacific</button>
+    <button class="region-tab" data-region="remote">Remote</button>
+  </div>
+
+  <div class="city-table" id="cityTable"></div>
+
+  <div class="heatmap-section">
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:16px;">Salary Heatmap</h2>
+    <div class="heatmap-grid" id="heatmapGrid"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</div>
+      <p>© 2017-2026 Levels Fyi Inc.</p>
+      <a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Levels.fyi</h4>
+      <a href="index.html">Home</a><a href="#">Compensation</a><a href="calculator.html">Calculator</a><a href="leaderboard.html">Top Paying</a><a href="#">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Popular Pages</h4>
+      <a href="salaries.html">Software Engineer Salary</a><a href="#">Data Scientist Salary</a><a href="#">Product Manager Salary</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Blog</a><a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2017-2026 Levels Fyi Inc.</div>
+</footer>
+
+<script>
+const locations = {
+  us: [
+    { name: "San Francisco, CA", avg: 285000, median: 245000, count: 45230, barPct: 100 },
+    { name: "New York City, NY", avg: 265000, median: 228000, count: 38200, barPct: 93 },
+    { name: "Seattle, WA", avg: 258000, median: 220000, count: 32400, barPct: 91 },
+    { name: "Mountain View, CA", avg: 275000, median: 238000, count: 18200, barPct: 96 },
+    { name: "Los Angeles, CA", avg: 235000, median: 205000, count: 16200, barPct: 82 },
+    { name: "Austin, TX", avg: 230000, median: 198000, count: 14800, barPct: 81 },
+    { name: "Boston, MA", avg: 225000, median: 195000, count: 13600, barPct: 79 },
+    { name: "Chicago, IL", avg: 210000, median: 185000, count: 12400, barPct: 74 },
+    { name: "Denver, CO", avg: 218000, median: 190000, count: 9200, barPct: 76 },
+    { name: "San Diego, CA", avg: 220000, median: 192000, count: 8500, barPct: 77 },
+    { name: "Washington, DC", avg: 215000, median: 188000, count: 7800, barPct: 75 },
+    { name: "Portland, OR", avg: 205000, median: 180000, count: 6200, barPct: 72 },
+    { name: "Atlanta, GA", avg: 198000, median: 172000, count: 5800, barPct: 69 },
+    { name: "Dallas, TX", avg: 195000, median: 170000, count: 5400, barPct: 68 },
+    { name: "Philadelphia, PA", avg: 185000, median: 162000, count: 4800, barPct: 65 },
+    { name: "Phoenix, AZ", avg: 178000, median: 155000, count: 4200, barPct: 62 },
+    { name: "Miami, FL", avg: 182000, median: 158000, count: 3800, barPct: 64 },
+    { name: "Minneapolis, MN", avg: 190000, median: 165000, count: 3600, barPct: 67 },
+    { name: "Raleigh, NC", avg: 195000, median: 170000, count: 3400, barPct: 68 },
+    { name: "Salt Lake City, UT", avg: 188000, median: 162000, count: 3100, barPct: 66 },
+  ],
+  canada: [
+    { name: "Toronto, ON", avg: 185000, median: 160000, count: 12400, barPct: 100 },
+    { name: "Vancouver, BC", avg: 178000, median: 155000, count: 8200, barPct: 96 },
+    { name: "Montreal, QC", avg: 145000, median: 128000, count: 5800, barPct: 78 },
+    { name: "Ottawa, ON", avg: 155000, median: 135000, count: 3400, barPct: 84 },
+    { name: "Calgary, AB", avg: 150000, median: 130000, count: 2800, barPct: 81 },
+    { name: "Waterloo, ON", avg: 160000, median: 140000, count: 2200, barPct: 86 },
+  ],
+  uk: [
+    { name: "London, UK", avg: 195000, median: 170000, count: 18200, barPct: 100 },
+    { name: "Cambridge, UK", avg: 160000, median: 140000, count: 4200, barPct: 82 },
+    { name: "Oxford, UK", avg: 155000, median: 135000, count: 2800, barPct: 79 },
+    { name: "Manchester, UK", avg: 135000, median: 118000, count: 3400, barPct: 69 },
+    { name: "Edinburgh, UK", avg: 140000, median: 122000, count: 2200, barPct: 72 },
+    { name: "Bristol, UK", avg: 145000, median: 125000, count: 1800, barPct: 74 },
+  ],
+  eu: [
+    { name: "Zurich, CH", avg: 210000, median: 185000, count: 4800, barPct: 100 },
+    { name: "Berlin, DE", avg: 155000, median: 135000, count: 8200, barPct: 74 },
+    { name: "Munich, DE", avg: 160000, median: 140000, count: 5200, barPct: 76 },
+    { name: "Amsterdam, NL", avg: 165000, median: 142000, count: 6200, barPct: 79 },
+    { name: "Dublin, IE", avg: 175000, median: 150000, count: 5400, barPct: 83 },
+    { name: "Paris, FR", avg: 145000, median: 125000, count: 4800, barPct: 69 },
+    { name: "Stockholm, SE", avg: 140000, median: 120000, count: 3600, barPct: 67 },
+    { name: "Copenhagen, DK", avg: 150000, median: 128000, count: 2800, barPct: 71 },
+    { name: "Barcelona, ES", avg: 125000, median: 108000, count: 3200, barPct: 60 },
+    { name: "Milan, IT", avg: 120000, median: 102000, count: 2200, barPct: 57 },
+  ],
+  asia: [
+    { name: "Singapore", avg: 175000, median: 152000, count: 9800, barPct: 100 },
+    { name: "Tokyo, JP", avg: 160000, median: 138000, count: 7200, barPct: 91 },
+    { name: "Bangalore, IN", avg: 85000, median: 72000, count: 16200, barPct: 49 },
+    { name: "Mumbai, IN", avg: 78000, median: 65000, count: 8400, barPct: 45 },
+    { name: "Shanghai, CN", avg: 95000, median: 80000, count: 6800, barPct: 54 },
+    { name: "Beijing, CN", avg: 100000, median: 85000, count: 6200, barPct: 57 },
+    { name: "Seoul, KR", avg: 120000, median: 102000, count: 4800, barPct: 69 },
+    { name: "Sydney, AU", avg: 165000, median: 142000, count: 5200, barPct: 94 },
+    { name: "Melbourne, AU", avg: 155000, median: 135000, count: 3800, barPct: 89 },
+  ],
+  remote: [
+    { name: "Remote (US)", avg: 240000, median: 210000, count: 28400, barPct: 100 },
+    { name: "Remote (Canada)", avg: 170000, median: 148000, count: 6800, barPct: 71 },
+    { name: "Remote (UK)", avg: 150000, median: 130000, count: 5200, barPct: 63 },
+    { name: "Remote (EU)", avg: 140000, median: 120000, count: 4800, barPct: 58 },
+    { name: "Remote (Asia)", avg: 80000, median: 68000, count: 6200, barPct: 33 },
+    { name: "Remote (Global)", avg: 185000, median: 160000, count: 14200, barPct: 77 },
+  ],
+};
+
+const heatmapData = [
+  { name: "San Francisco", salary: 285000, color: "#0060b9" },
+  { name: "New York", salary: 265000, color: "#0060b9" },
+  { name: "Seattle", salary: 258000, color: "#0060b9" },
+  { name: "Los Angeles", salary: 235000, color: "#1776d2" },
+  { name: "Austin", salary: 230000, color: "#1776d2" },
+  { name: "Boston", salary: 225000, color: "#1776d2" },
+  { name: "Chicago", salary: 210000, color: "#2c8ae0" },
+  { name: "Denver", salary: 218000, color: "#1776d2" },
+  { name: "Atlanta", salary: 198000, color: "#2c8ae0" },
+  { name: "Miami", salary: 182000, color: "#4da0ea" },
+  { name: "Toronto", salary: 185000, color: "#4da0ea" },
+  { name: "Vancouver", salary: 178000, color: "#4da0ea" },
+  { name: "London", salary: 195000, color: "#2c8ae0" },
+  { name: "Berlin", salary: 155000, color: "#6bb4f0" },
+  { name: "Amsterdam", salary: 165000, color: "#5daaf0" },
+  { name: "Zurich", salary: 210000, color: "#1776d2" },
+  { name: "Singapore", salary: 175000, color: "#4da0ea" },
+  { name: "Tokyo", salary: 160000, color: "#6bb4f0" },
+  { name: "Sydney", salary: 165000, color: "#5daaf0" },
+  { name: "Remote", salary: 240000, color: "#0060b9" },
+];
+
+function formatSal(val) {
+  return "$" + (val / 1000).toFixed(0) + "K";
+}
+
+function renderLocationTable(region) {
+  const data = locations[region] || locations.us;
+  const max = Math.max(...data.map(d => d.avg));
+  const table = document.getElementById('cityTable');
+  let html = `<table>
+    <thead><tr>
+      <th style="width:40px;">#</th>
+      <th>Location</th>
+      <th style="text-align:right;">Average Salary</th>
+      <th style="text-align:right;">Median</th>
+      <th style="text-align:right;">Salaries</th>
+      <th></th>
+    </tr></thead><tbody>`;
+  data.forEach((d, i) => {
+    const pct = (d.avg / max * 100);
+    html += `<tr>
+      <td class="rank-num">${i + 1}</td>
+      <td><div class="loc-name">${d.name}</div></td>
+      <td class="salary-col">${formatSal(d.avg)}</td>
+      <td style="text-align:right;font-weight:600;">${formatSal(d.median)}</td>
+      <td style="text-align:right;color:var(--color-text-muted);">${d.count.toLocaleString()}</td>
+      <td class="salary-bar"><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  table.innerHTML = html;
+}
+
+function renderHeatmap() {
+  const grid = document.getElementById('heatmapGrid');
+  const maxSal = Math.max(...heatmapData.map(d => d.salary));
+  grid.innerHTML = heatmapData.map(d => {
+    const intensity = Math.round((d.salary / maxSal) * 0.5 + 0.3 * 100);
+    return `<div class="heatmap-cell" style="background:rgba(0,96,185,${intensity / 200});">
+      <div>${d.name}</div>
+      <div class="hm-salary">${formatSal(d.salary)}</div>
+    </div>`;
+  }).join('');
+}
+
+// Region tabs
+document.querySelectorAll('.region-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderLocationTable(tab.dataset.region);
+  });
+});
+
+renderLocationTable('us');
+renderHeatmap();
+</script>
+
+</body>
+</html>

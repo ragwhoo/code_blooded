@@ -42,7 +42,7 @@ export default function BotVsHumanChart({ data: propData, loading }) {
           <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.01)" strokeWidth={1} />
           <XAxis dataKey="name" tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 12, fontWeight: 600 }} axisLine={{ stroke: 'rgba(255,255,255,0.01)' }} tickLine={false} />
           <YAxis tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 11, fontWeight: 600 }} axisLine={{ stroke: 'rgba(255,255,255,0.01)' }} tickLine={false} />
-          <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#FFFFFF', fontSize: '12px', fontWeight: 700, padding: '12px' }} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
+          <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#FFFFFF', fontSize: '12px', fontWeight: 700, padding: '12px' }} itemStyle={{ color: '#FFFFFF' }} labelStyle={{ color: '#FFFFFF' }} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
           <Bar dataKey="requests" radius={[8, 8, 0, 0]} maxBarSize={60}>
             {chartData.map((entry) => (
               <Cell key={entry.name} fill={`url(#${entry.name.toLowerCase()}Bar)`} />

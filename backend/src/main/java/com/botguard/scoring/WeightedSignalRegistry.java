@@ -1,7 +1,9 @@
 package com.botguard.scoring;
 
+import com.botguard.reputation.ReputationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class WeightedSignalRegistry {
     private final Map<String, WeightedSignal> signals = new ConcurrentHashMap<>();
     private final Map<String, Double> weightOverrides = new ConcurrentHashMap<>();
 
+    @Autowired
+    private ReputationService reputationService;
+
     public WeightedSignalRegistry(StringRedisTemplate redis) {
         this.redis = redis;
     }
@@ -29,7 +34,7 @@ public class WeightedSignalRegistry {
         register(new HoneypotSignal());
         register(new FingerprintSignal());
         register(new BehaviorEntropySignal());
-        register(new ReputationSignal());
+        register(new ReputationSignal(reputationService));
         loadWeights();
     }
 

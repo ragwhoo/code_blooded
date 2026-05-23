@@ -236,4 +236,10 @@ public class ApiController {
     public ResponseEntity<?> getMitigationDistribution() {
         return ResponseEntity.ok(Map.of("distribution", timeSeriesService.getMitigationDistribution()));
     }
+
+    @PostMapping("/analytics/reset")
+    public ResponseEntity<?> resetAnalytics() {
+        analyticsService.reset();
+        return ResponseEntity.ok(Map.of("status", "reset"));
+    }
 }

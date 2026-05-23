@@ -38,6 +38,15 @@ public class AnalyticsService {
     private final Map<String, Long> requestTimestamps = new ConcurrentHashMap<>();
     private final AtomicLong lastRequestTime = new AtomicLong(System.currentTimeMillis());
 
+    public void reset() {
+        totalRequests.set(0);
+        blockedRequests.set(0);
+        activeSessions.set(0);
+        botDetections.set(0);
+        requestTimestamps.clear();
+        eventBuffer.clear();
+    }
+
     public void incrementRequestCount() {
         totalRequests.incrementAndGet();
         lastRequestTime.set(System.currentTimeMillis());

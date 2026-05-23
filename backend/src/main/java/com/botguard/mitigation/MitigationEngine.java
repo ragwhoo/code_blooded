@@ -151,4 +151,9 @@ public class MitigationEngine {
         Set<String> blockedIps = redis.opsForSet().members(INDEX_BLOCKED_IPS);
         return blockedIps == null ? 0 : blockedIps.size();
     }
+
+    public void clearBlock(String ip) {
+        redis.opsForSet().remove(INDEX_BLOCKED_IPS, ip);
+        redis.delete(KEY_IP + ip);
+    }
 }

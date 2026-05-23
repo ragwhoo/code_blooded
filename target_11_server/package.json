@@ -1,0 +1,8 @@
+{
+  "name": "target-11",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js"
+  }
+}

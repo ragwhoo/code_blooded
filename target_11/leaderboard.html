@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Top Paying Companies - Levels.fyi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+:root{--color-primary-default:#0060b9;--color-primary-medium:#1776d2;--color-primary-light:#e8f0fe;--color-secondary-default:#19a672;--color-text-default:#1a1a2e;--color-text-secondary:#757685;--color-text-muted:#9e9eae;--color-neutral-100:#f5f6f8;--color-neutral-200:#ebe9e9;--color-neutral-300:#d4d4dc;--color-bg:#eff4f9;--color-white:#fff;--color-blue-50:#e8f0fe;--color-gold:#f5a623;--color-silver:#9e9eae;--color-bronze:#cd7f32;--border-radius-default:.5rem;--border-radius-pill:20rem;--shadow-sm:0 1px 3px rgba(0,0,0,0.08);--shadow-md:0 4px 12px rgba(0,0,0,0.1);--shadow-lg:0 8px 24px rgba(0,0,0,0.12)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Nunito,sans-serif;background:linear-gradient(#eff4f9,#fff);color:var(--color-text-default);line-height:1.5}
+a{text-decoration:none;color:var(--color-primary-default)}
+button{cursor:pointer;font-family:inherit;border:none;background:none;font-size:inherit}
+.top-banner{background:#1a1a2e;color:#fff;text-align:center;padding:8px 16px;font-size:14px;font-weight:500}
+.top-banner a{color:#64b5f6;text-decoration:underline}
+.navbar{background:var(--color-white);border-bottom:1px solid var(--color-neutral-200);position:sticky;top:0;z-index:1000}
+.navbar-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;height:64px;justify-content:space-between}
+.nav-left{display:flex;align-items:center;gap:32px}
+.nav-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:20px;color:var(--color-text-default)}
+.nav-logo svg{width:28px;height:28px}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{color:var(--color-text-secondary);font-size:14px;font-weight:600;padding:8px 14px;border-radius:6px}
+.nav-links a:hover{color:var(--color-text-default);background:var(--color-neutral-100)}
+.nav-links a.active{color:var(--color-primary-default);background:var(--color-blue-50)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.nav-btn{padding:8px 16px;border-radius:var(--border-radius-default);font-weight:600;font-size:14px}
+.nav-btn-outline{border:1px solid var(--color-neutral-300);color:var(--color-text-default)}
+.nav-btn-primary{background:var(--color-primary-default);color:#fff}
+.nav-btn-ghost{color:var(--color-text-default)}
+.hamburger{display:none;font-size:24px;cursor:pointer}
+.page-header{text-align:center;padding:40px 24px 24px}
+.page-header h1{font-size:2rem;font-weight:800;color:#273a51}
+.page-header p{color:var(--color-text-secondary);margin-top:6px}
+.page-container{max-width:960px;margin:0 auto;padding:0 24px}
+.lb-tabs{display:flex;gap:4px;overflow-x:auto;margin-bottom:24px;justify-content:center}
+.lb-tab{padding:10px 24px;border-radius:var(--border-radius-pill);font-size:14px;font-weight:500;white-space:nowrap;color:var(--color-text-secondary)}
+.lb-tab:hover{background:var(--color-neutral-100)}
+.lb-tab.active{background:var(--color-primary-default);color:#fff;font-weight:600}
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:16px;margin-bottom:32px;padding:0 20px}
+.podium-card{flex:1;max-width:260px;text-align:center;border-radius:var(--border-radius-default);padding:24px 16px;cursor:pointer}
+.podium-card:hover{transform:translateY(-4px)}
+.podium-card.gold{background:linear-gradient(180deg,#fff8e1,#fff);border:2px solid #f5a623;position:relative}
+.podium-card.silver{background:linear-gradient(180deg,#f5f5f5,#fff);border:2px solid #bdbdbd}
+.podium-card.bronze{background:linear-gradient(180deg,#fbe9e7,#fff);border:2px solid #cd7f32}
+.podium-card .pc-rank{font-size:32px;font-weight:800}
+.podium-card.gold .pc-rank{color:#f5a623}
+.podium-card.silver .pc-rank{color:#9e9eae}
+.podium-card.bronze .pc-rank{color:#cd7f32}
+.podium-card .pc-company{font-size:18px;font-weight:700}
+.podium-card .pc-total{font-size:28px;font-weight:800;color:var(--color-primary-default);margin:8px 0 4px}
+.podium-card .pc-label{font-size:12px;color:var(--color-text-muted)}
+.podium-card .pc-level{font-size:13px;color:var(--color-text-secondary)}
+.podium-card .crown{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:28px}
+.lb-table{background:#fff;border:1px solid var(--color-neutral-200);border-radius:var(--border-radius-default);overflow:hidden}
+.lb-table table{width:100%;border-collapse:collapse}
+.lb-table th{background:var(--color-neutral-100);padding:14px 18px;text-align:left;font-size:13px;font-weight:700;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.lb-table td{padding:16px 18px;border-bottom:1px solid var(--color-neutral-200);font-size:14px}
+.lb-table tr:hover td{background:var(--color-blue-50)}
+.lb-table .rank-col{width:50px;font-weight:800;text-align:center}
+.lb-table .rank-1{color:var(--color-gold)}
+.lb-table .rank-2{color:var(--color-silver)}
+.lb-table .rank-3{color:var(--color-bronze)}
+.lb-table .company-col{font-weight:700}
+.lb-table .company-col .ind{font-weight:400;font-size:12px;color:var(--color-text-muted)}
+.lb-table .num-col{text-align:right;font-weight:700;color:var(--color-primary-default)}
+.lb-table .num-col2{text-align:right;color:var(--color-text-secondary)}
+.lb-table .bar-col{width:120px}
+.lb-table .bar-bg{height:8px;background:var(--color-neutral-200);border-radius:4px;overflow:hidden}
+.lb-table .bar-fill{height:100%;background:linear-gradient(90deg,var(--color-primary-default),#4da0ea);border-radius:4px}
+.tt-section{margin-top:40px}
+.tt-section h2{font-size:18px;font-weight:700;margin-bottom:16px}
+.tt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.tt-card{background:#fff;border:1px solid var(--color-neutral-200);border-radius:var(--border-radius-default);padding:20px;text-align:center;cursor:pointer}
+.tt-card:hover{box-shadow:var(--shadow-md)}
+.tt-card .tt-rank{font-size:12px;font-weight:700;color:var(--color-text-muted)}
+.tt-card .tt-title{font-size:14px;font-weight:700;margin:6px 0}
+.tt-card .tt-sal{font-size:20px;font-weight:800;color:var(--color-primary-default)}
+.tt-card .tt-co{font-size:12px;color:var(--color-text-secondary)}
+.yr-section{margin-top:40px;background:#fff;border:1px solid var(--color-neutral-200);border-radius:var(--border-radius-default);padding:28px;text-align:center}
+.yr-section h2{font-size:20px;font-weight:700}
+.yr-section p{color:var(--color-text-secondary);font-size:14px;max-width:600px;margin:12px auto 20px}
+.yr-btn{display:inline-block;padding:12px 32px;background:var(--color-primary-default);color:#fff;border-radius:var(--border-radius-pill);font-weight:700;font-size:15px}
+.yr-btn:hover{background:var(--color-primary-medium)}
+.footer{background:#1a1a2e;color:#ccc;padding:48px 24px 24px;margin-top:48px}
+.footer-inner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:2fr 2fr 2fr 2fr;gap:32px}
+.footer-col h4{color:#fff;font-size:14px;font-weight:700;margin-bottom:16px}
+.footer-col a{display:block;color:#999;font-size:13px;margin-bottom:8px}
+.footer-logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;color:#fff;margin-bottom:12px}
+.footer-logo svg{width:24px;height:24px}
+.footer-app-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:1px solid #555;border-radius:var(--border-radius-default);color:#fff;font-size:13px;font-weight:600;margin-top:12px}
+.footer-bottom{max-width:1280px;margin:32px auto 0;padding-top:16px;border-top:1px solid #333;text-align:center;font-size:13px;color:#666}
+@media(max-width:768px){.nav-links,.nav-right .nav-btn-ghost,.nav-right .nav-btn-outline{display:none}.hamburger{display:block}.footer-inner{grid-template-columns:1fr 1fr}.podium{flex-direction:column;align-items:center}}
+</style>
+</head>
+<body>
+<div class="top-banner"><i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays <a href="#">Read More <i class="fas fa-arrow-right"></i></a></div>
+<nav class="navbar">
+<div class="navbar-inner">
+<div class="nav-left">
+<a href="index.html" class="nav-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7"/><polyline points="4,12 12,8 20,12"/><polyline points="4,17 12,13 20,17"/></svg> Levels.fyi</a>
+<div class="nav-links">
+<a href="index.html">Salaries</a><a href="leaderboard.html" class="active">Leaderboard</a><a href="companies.html">Companies</a><a href="locations.html">Locations</a><a href="salaries.html">Titles</a><a href="calculator.html">Calculator</a>
+</div></div>
+<div class="nav-right">
+<button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+<button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+<button class="nav-btn nav-btn-ghost">Sign In</button>
+<button class="nav-btn nav-btn-primary">Sign Up</button>
+<span class="hamburger"><i class="fas fa-bars"></i></span>
+</div></div></nav>
+<div class="page-header">
+<h1><i class="fas fa-trophy" style="color:#f5a623;"></i> Top Paying Companies</h1>
+<p>Explore the highest paying companies for software engineers and tech roles in 2026</p>
+</div>
+<div class="page-container">
+<div class="lb-tabs" id="lbTabs">
+<button class="lb-tab active" data-cat="swe">Software Engineer</button>
+<button class="lb-tab" data-cat="pm">Product Manager</button>
+<button class="lb-tab" data-cat="ds">Data Scientist</button>
+<button class="lb-tab" data-cat="mgmt">Engineering Manager</button>
+</div>
+<div id="podiumArea" class="podium"></div>
+<div class="lb-table" id="lbTable"></div>
+<div class="tt-section">
+<h2>Highest Paying Roles</h2>
+<div class="tt-grid" id="topRolesGrid"></div>
+</div>
+<div class="yr-section">
+<h2><i class="fas fa-file-alt"></i> 2025 Pay Report</h2>
+<p>Our annual comprehensive report on software engineer compensation trends, salary data, and market analysis across all levels and locations.</p>
+<a href="#" class="yr-btn">Download the 2025 Pay Report <i class="fas fa-download"></i></a>
+</div>
+</div>
+<footer class="footer">
+<div class="footer-inner">
+<div class="footer-col">
+<div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7"/><polyline points="4,12 12,8 20,12"/><polyline points="4,17 12,13 20,17"/></svg> Levels.fyi</div>
+<p>&copy; 2017-2026 Levels Fyi Inc.</p>
+<a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+</div>
+<div class="footer-col">
+<h4>Levels.fyi</h4>
+<a href="index.html">Home</a><a href="#">Compensation</a><a href="calculator.html">Calculator</a><a href="leaderboard.html">Top Paying</a>
+</div>
+<div class="footer-col">
+<h4>Explore</h4>
+<a href="companies.html">By Company</a><a href="locations.html">By Location</a><a href="salaries.html">By Title</a>
+</div>
+<div class="footer-col">
+<h4>Community</h4>
+<a href="#">Blog</a><a href="#">Terms</a><a href="#">Privacy</a>
+</div>
+</div>
+<div class="footer-bottom">&copy; 2017-2026 Levels Fyi Inc.</div>
+</footer>
+<script>
+var leaderboardData = {
+swe: [
+{company:"Netflix",ind:"Technology",avg:521000,tc:830000,salaries:8200,level:"IC6",pct:100},
+{company:"Databricks",ind:"Technology",avg:445000,tc:780000,salaries:3600,level:"IC6",pct:85},
+{company:"Snowflake",ind:"Technology",avg:430000,tc:735000,salaries:4200,level:"IC5",pct:83},
+{company:"Coinbase",ind:"Finance",avg:420000,tc:720000,salaries:3200,level:"IC6",pct:81},
+{company:"Meta",ind:"Technology",avg:402000,tc:839000,salaries:32100,level:"IC7",pct:77},
+{company:"Google",ind:"Technology",avg:387000,tc:897000,salaries:45230,level:"L8",pct:74},
+{company:"Nvidia",ind:"Technology",avg:394000,tc:1100000,salaries:12400,level:"IC8",pct:76},
+{company:"Robinhood",ind:"Finance",avg:395000,tc:680000,salaries:2800,level:"IC6",pct:76},
+{company:"Stripe",ind:"Technology",avg:385000,tc:665000,salaries:6800,level:"IC5",pct:74},
+{company:"Airbnb",ind:"Technology",avg:378000,tc:680000,salaries:5400,level:"IC6",pct:73},
+{company:"DoorDash",ind:"Technology",avg:372000,tc:630000,salaries:5100,level:"IC6",pct:71},
+{company:"Datadog",ind:"Technology",avg:365000,tc:620000,salaries:2800,level:"IC6",pct:70},
+{company:"Snap",ind:"Technology",avg:365000,tc:640000,salaries:4500,level:"IC6",pct:70},
+{company:"LinkedIn",ind:"Technology",avg:365000,tc:620000,salaries:9800,level:"IC6",pct:70},
+{company:"TikTok",ind:"Technology",avg:358000,tc:620000,salaries:6200,level:"IC6",pct:69},
+{company:"Pinterest",ind:"Technology",avg:352000,tc:605000,salaries:4100,level:"IC6",pct:68},
+{company:"MongoDB",ind:"Technology",avg:350000,tc:600000,salaries:2200,level:"IC5",pct:67},
+{company:"Uber",ind:"Technology",avg:346000,tc:575000,salaries:15200,level:"IC6",pct:66},
+{company:"Square",ind:"Finance",avg:345000,tc:590000,salaries:3800,level:"IC5",pct:66},
+{company:"Apple",ind:"Technology",avg:340000,tc:633000,salaries:22300,level:"ICT6",pct:65},
+{company:"Twilio",ind:"Technology",avg:310000,tc:535000,salaries:3400,level:"IC5",pct:60},
+{company:"ServiceNow",ind:"Technology",avg:310000,tc:540000,salaries:5600,level:"IC5",pct:60},
+{company:"Spotify",ind:"Technology",avg:305000,tc:520000,salaries:5600,level:"IC5",pct:59},
+{company:"Tesla",ind:"Technology",avg:298000,tc:520000,salaries:9400,level:"P4",pct:57},
+{company:"Atlassian",ind:"Technology",avg:290000,tc:480000,salaries:6200,level:"IC5",pct:56},
+{company:"Adobe",ind:"Technology",avg:290000,tc:510000,salaries:11200,level:"IC5",pct:56},
+{company:"Microsoft",ind:"Technology",avg:285000,tc:890000,salaries:28400,level:"68",pct:55},
+{company:"Workday",ind:"Technology",avg:275000,tc:470000,salaries:4800,level:"IC5",pct:53},
+{company:"Salesforce",ind:"Technology",avg:270000,tc:365000,salaries:18100,level:"EMTS",pct:52},
+{company":"VMware",ind:"Technology",avg:260000,tc:445000,salaries:7200,level:"IC5",pct:50}
+],
+pm: [
+{company:"Meta",ind:"Technology",avg:398000,tc:750000,salaries:4200,level:"IC6",pct:100},
+{company:"Google",ind:"Technology",avg:375000,tc:720000,salaries:5800,level:"L7",pct:94},
+{company:"Netflix",ind:"Technology",avg:510000,tc:810000,salaries:1200,level:"IC5",pct:100},
+{company:"Apple",ind:"Technology",avg:350000,tc:580000,salaries:2400,level:"ICT5",pct:88},
+{company:"Microsoft",ind:"Technology",avg:290000,tc:510000,salaries:3800,level:"65",pct:73},
+{company:"Amazon",ind:"Technology",avg:310000,tc:540000,salaries:6200,level:"L7",pct:78}
+],
+ds: [
+{company:"Netflix",ind:"Technology",avg:490000,tc:780000,salaries:800,level:"IC5",pct:100},
+{company:"Meta",ind:"Technology",avg:378000,tc:680000,salaries:3400,level:"IC6",pct:77},
+{company:"Google",ind:"Technology",avg:352000,tc:640000,salaries:5200,level:"L6",pct:72},
+{company:"Apple",ind:"Technology",avg:325000,tc:550000,salaries:1800,level:"ICT5",pct:66},
+{company:"Amazon",ind:"Technology",avg:295000,tc:510000,salaries:4800,level:"L6",pct:60},
+{company:"Microsoft",ind:"Technology",avg:268000,tc:460000,salaries:3400,level:"64",pct:55}
+],
+mgmt: [
+{company:"Netflix",ind:"Technology",avg:620000,tc:1100000,salaries:600,level:"IC6",pct:100},
+{company:"Meta",ind:"Technology",avg:498000,tc:900000,salaries:2800,level:"M2",pct:80},
+{company:"Google",ind:"Technology",avg:475000,tc:850000,salaries:4200,level:"L7",pct:77},
+{company:"Apple",ind:"Technology",avg:440000,tc:780000,salaries:1400,level:"ICT6",pct:71},
+{company:"Amazon",ind:"Technology",avg:398000,tc:720000,salaries:3600,level:"L7",pct:64},
+{company:"Microsoft",ind:"Technology",avg:355000,tc:620000,salaries:2400,level:"66",pct:57}
+]
+};
+var topRoles = [
+{rank:1,title:"CTO",salary:1600000,company:"Various"},
+{rank:2,title:"VP of Engineering",salary:1300000,company:"Various"},
+{rank:3,title:"Fellow",salary:1350000,company:"Google"},
+{rank:4,title:"Distinguished Engineer",salary:980000,company:"Various"},
+{rank:5,title:"SVP of Engineering",salary:1800000,company:"Various"},
+{rank:6,title:"Principal Engineer",salary:710000,company:"Various"},
+{rank:7,title:"Director of Engineering",salary:710000,company:"Various"},
+{rank:8,title:"CISO",salary:950000,company:"Various"},
+{rank:9,title:"VP of Product",salary:1100000,company:"Various"},
+{rank:10,title:"VP of Sales",salary:700000,company:"Various"}
+];
+function fmt(v){return v>=1000000?"$"+(v/1000000).toFixed(1)+"M":"$"+(v/1000).toFixed(0)+"K"}
+function renderLeaderboard(cat){
+var data=leaderboardData[cat]||leaderboardData.swe;
+var podium=document.getElementById("podiumArea");
+var top3=data.slice(0,3);
+var medals=["gold","silver","bronze"];
+var crowns=['<span class="crown">👑</span>','',''];
+podium.innerHTML=top3.map(function(d,i){
+return '<div class="podium-card '+medals[i]+'">'+crowns[i]+'<div class="pc-rank">#'+(i+1)+'</div><div class="pc-company">'+d.company+'</div><div class="pc-total">'+fmt(d.avg)+'</div><div class="pc-label">Average TC</div><div class="pc-level">Top Level: '+d.level+' ('+fmt(d.tc)+')</div></div>';
+}).join("");
+var maxSal=data[0].avg;
+var table=document.getElementById("lbTable");
+var h='<table><thead><tr><th style="width:50px;text-align:center;">#</th><th>Company</th><th style="text-align:right;">Avg. TC</th><th style="text-align:right;">Top Level TC</th><th style="text-align:right;">Salaries</th><th></th></tr></thead><tbody>';
+data.forEach(function(d,i){
+var pct=(d.avg/maxSal*100);
+h+='<tr><td class="rank-col rank-'+(i<3?(i+1):'')+'">#'+(i+1)+'</td><td class="company-col">'+d.company+' <span class="ind">'+d.ind+'</span></td><td class="num-col">'+fmt(d.avg)+'</td><td class="num-col">'+fmt(d.tc)+'</td><td class="num-col2">'+(d.salaries/1000).toFixed(0)+'K</td><td class="bar-col"><div class="bar-bg"><div class="bar-fill" style="width:'+pct+'%"></div></div></td></tr>';
+});
+h+='</tbody></table>';
+table.innerHTML=h;
+}
+function renderTopRoles(){
+var grid=document.getElementById("topRolesGrid");
+grid.innerHTML=topRoles.map(function(d){
+return '<div class="tt-card"><div class="tt-rank">#'+d.rank+'</div><div class="tt-title">'+d.title+'</div><div class="tt-sal">'+fmt(d.salary)+'</div><div class="tt-co">'+d.company+'</div></div>';
+}).join("");
+}
+document.querySelectorAll(".lb-tab").forEach(function(t){
+t.addEventListener("click",function(){
+document.querySelectorAll(".lb-tab").forEach(function(x){x.classList.remove("active")});
+t.classList.add("active");
+renderLeaderboard(t.dataset.cat);
+});
+});
+renderLeaderboard("swe");
+renderTopRoles();
+</script>
+</body>
+</html>

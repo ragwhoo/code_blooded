@@ -67,16 +67,16 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         <StatCard title="Total Requests" value={stats?.totalRequests}
-          icon={<img src="/logos/totalrequests.png" alt="" className="w-full object-contain" />} color="primary" trend={12}
+          icon={<img src="/logos/totalrequests.png" alt="" className="w-full object-contain" />} color="primary"
           subtitle="vs last hour" loading={loading} />
         <StatCard title="Bots Detected" value={stats?.botDetections}
-          icon={<img src="/logos/botdetected.png" alt="" className="w-full object-contain" />} color="danger" trend={8}
-          subtitle="+18% from yesterday" loading={loading} />
+          icon={<img src="/logos/botdetected.png" alt="" className="w-full object-contain" />} color="danger"
+          subtitle="from total traffic" loading={loading} />
         <StatCard title="Active Sessions" value={stats?.activeSessions}
-          icon={<img src="/logos/active sessions.png" alt="" className="w-full object-contain" />} color="cyan" trend={-3}
+          icon={<img src="/logos/active sessions.png" alt="" className="w-full object-contain" />} color="cyan"
           subtitle="currently active" loading={loading} />
         <StatCard title="Block Rate" value={stats?.blockedRequests != null ? `${((stats.blockedRequests / Math.max(stats.totalRequests, 1)) * 100).toFixed(1)}%` : null}
-          icon={<img src="/logos/botsblocked.png" alt="" className="w-full object-contain" />} color="warning" trend={0}
+          icon={<img src="/logos/botsblocked.png" alt="" className="w-full object-contain" />} color="warning"
           subtitle="of total traffic" loading={loading} />
       </div>
 

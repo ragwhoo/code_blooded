@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salaries by Title - Levels.fyi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --color-primary-default: #0060b9;
+      --color-primary-medium: #1776d2;
+      --color-primary-light: #e8f0fe;
+      --color-secondary-default: #19a672;
+      --color-text-default: #1a1a2e;
+      --color-text-secondary: #757685;
+      --color-text-muted: #9e9eae;
+      --color-neutral-100: #f5f6f8;
+      --color-neutral-200: #ebe9e9;
+      --color-neutral-300: #d4d4dc;
+      --color-bg: #eff4f9;
+      --color-white: #ffffff;
+      --color-blue-50: #e8f0fe;
+      --border-radius-default: 0.5rem;
+      --border-radius-pill: 20rem;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: linear-gradient(#eff4f9, #fff); color: var(--color-text-default); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--color-primary-default); }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; font-size: inherit; }
+    .top-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+    .top-banner a { color: #64b5f6; text-decoration: underline; }
+    .navbar { background: var(--color-white); border-bottom: 1px solid var(--color-neutral-200); position: sticky; top: 0; z-index: 1000; }
+    .navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 64px; justify-content: space-between; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; color: var(--color-text-default); }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: var(--color-text-secondary); font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text-default); background: var(--color-neutral-100); }
+    .nav-links a.active { color: var(--color-primary-default); background: var(--color-blue-50); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { padding: 8px 16px; border-radius: var(--border-radius-default); font-weight: 600; font-size: 14px; }
+    .nav-btn-outline { border: 1px solid var(--color-neutral-300); color: var(--color-text-default); }
+    .nav-btn-primary { background: var(--color-primary-default); color: #fff; }
+    .nav-btn-ghost { color: var(--color-text-default); }
+    .hamburger { display: none; font-size: 24px; cursor: pointer; }
+
+    .page-header { text-align: center; padding: 40px 24px 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: #273a51; }
+    .page-header p { color: var(--color-text-secondary); margin-top: 6px; }
+
+    .page-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    .title-tabs { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 24px; }
+    .title-tab { padding: 10px 20px; border-radius: var(--border-radius-pill); font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--color-text-secondary); transition: all 0.2s; }
+    .title-tab:hover { background: var(--color-neutral-100); }
+    .title-tab.active { background: var(--color-primary-default); color: #fff; font-weight: 600; }
+
+    .table-wrap { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); overflow: hidden; }
+    .table-wrap table { width: 100%; border-collapse: collapse; }
+    .table-wrap th { background: var(--color-neutral-100); padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .table-wrap td { padding: 16px 18px; border-bottom: 1px solid var(--color-neutral-200); font-size: 14px; }
+    .table-wrap tr:hover td { background: var(--color-blue-50); }
+    .title-cell { font-weight: 700; }
+    .salary-cell { text-align: right; font-weight: 700; color: var(--color-primary-default); }
+    .company-badge { display: inline-block; padding: 2px 10px; border-radius: var(--border-radius-pill); background: var(--color-blue-50); color: var(--color-primary-default); font-size: 12px; font-weight: 600; }
+    .seniority-badge { display: inline-block; padding: 2px 10px; border-radius: var(--border-radius-pill); font-size: 12px; font-weight: 600; }
+    .badge-junior { background: #e8f5e9; color: #2e7d32; }
+    .badge-mid { background: #fff3e0; color: #e65100; }
+    .badge-senior { background: #fce4ec; color: #c62828; }
+    .badge-exec { background: #f3e5f5; color: #6a1b9a; }
+
+    .footer { background: #1a1a2e; color: #ccc; padding: 48px 24px 24px; margin-top: 48px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 2fr 2fr 2fr; gap: 32px; }
+    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; margin-bottom: 8px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 12px; }
+    .footer-logo svg { width: 24px; height: 24px; }
+    .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #555; border-radius: var(--border-radius-default); color: #fff; font-size: 13px; font-weight: 600; margin-top: 12px; }
+    .footer-bottom { max-width: 1280px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 13px; color: #666; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .nav-btn-ghost, .nav-right .nav-btn-outline { display: none; }
+      .hamburger { display: block; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner"><i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays <a href="#">Read More <i class="fas fa-arrow-right"></i></a></div>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</a>
+      <div class="nav-links">
+        <a href="index.html">Salaries</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="companies.html">Companies</a>
+        <a href="locations.html">Locations</a>
+        <a href="salaries.html" class="active">Titles</a>
+        <a href="calculator.html">Calculator</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+      <button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+      <button class="nav-btn nav-btn-ghost">Sign In</button>
+      <button class="nav-btn nav-btn-primary">Sign Up</button>
+      <span class="hamburger"><i class="fas fa-bars"></i></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Salaries by Title</h1>
+  <p>Explore compensation for thousands of job titles across companies and experience levels</p>
+</div>
+
+<div class="page-container">
+  <div class="title-tabs" id="titleTabs">
+    <button class="title-tab active" data-family="swe">Software Engineer</button>
+    <button class="title-tab" data-family="ds">Data Science</button>
+    <button class="title-tab" data-family="pm">Product Management</button>
+    <button class="title-tab" data-family="design">Design</button>
+    <button class="title-tab" data-family="mgmt">Engineering Management</button>
+    <button class="title-tab" data-family="devops">DevOps / Infrastructure</button>
+    <button class="title-tab" data-family="security">Security</button>
+    <button class="title-tab" data-family="sales">Sales</button>
+    <button class="title-tab" data-family="hw">Hardware</button>
+  </div>
+
+  <div class="table-wrap" id="salaryTable"></div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</div>
+      <p>© 2017-2026 Levels Fyi Inc.</p>
+      <a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Levels.fyi</h4>
+      <a href="index.html">Home</a><a href="#">Compensation</a><a href="calculator.html">Calculator</a><a href="leaderboard.html">Top Paying</a>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <a href="companies.html">By Company</a><a href="locations.html">By Location</a><a href="salaries.html">By Title</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Blog</a><a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2017-2026 Levels Fyi Inc.</div>
+</footer>
+
+<script>
+const titleData = {
+  swe: [
+    { title: "Software Engineer I", seniority: "Junior", base: 115000, stock: 25000, bonus: 15000, total: 155000, count: 18200 },
+    { title: "Software Engineer II", seniority: "Mid", base: 145000, stock: 40000, bonus: 25000, total: 210000, count: 28400 },
+    { title: "Senior Software Engineer", seniority: "Senior", base: 185000, stock: 75000, bonus: 45000, total: 305000, count: 36200 },
+    { title: "Staff Software Engineer", seniority: "Senior", base: 220000, stock: 120000, bonus: 65000, total: 405000, count: 12400 },
+    { title: "Senior Staff Engineer", seniority: "Senior", base: 260000, stock: 180000, bonus: 85000, total: 525000, count: 5200 },
+    { title: "Principal Engineer", seniority: "Exec", base: 310000, stock: 280000, bonus: 120000, total: 710000, count: 3800 },
+    { title: "Distinguished Engineer", seniority: "Exec", base: 380000, stock: 420000, bonus: 180000, total: 980000, count: 1200 },
+    { title: "Fellow", seniority: "Exec", base: 450000, stock: 650000, bonus: 250000, total: 1350000, count: 400 },
+    { title: "Engineering Manager I", seniority: "Mid", base: 195000, stock: 80000, bonus: 50000, total: 325000, count: 8400 },
+    { title: "Engineering Manager II", seniority: "Senior", base: 240000, stock: 140000, bonus: 70000, total: 450000, count: 5600 },
+    { title: "Director of Engineering", seniority: "Exec", base: 310000, stock: 250000, bonus: 120000, total: 680000, count: 2400 },
+    { title: "VP of Engineering", seniority: "Exec", base: 400000, stock: 450000, bonus: 200000, total: 1050000, count: 800 },
+    { title: "CTO", seniority: "Exec", base: 500000, stock: 800000, bonus: 300000, total: 1600000, count: 300 },
+  ],
+  ds: [
+    { title: "Data Analyst", seniority: "Junior", base: 95000, stock: 15000, bonus: 12000, total: 122000, count: 12400 },
+    { title: "Data Scientist I", seniority: "Junior", base: 120000, stock: 25000, bonus: 18000, total: 163000, count: 8200 },
+    { title: "Data Scientist II", seniority: "Mid", base: 150000, stock: 40000, bonus: 28000, total: 218000, count: 9600 },
+    { title: "Senior Data Scientist", seniority: "Senior", base: 190000, stock: 70000, bonus: 45000, total: 305000, count: 6800 },
+    { title: "Staff Data Scientist", seniority: "Senior", base: 230000, stock: 110000, bonus: 65000, total: 405000, count: 2400 },
+    { title: "Principal Data Scientist", seniority: "Exec", base: 280000, stock: 180000, bonus: 90000, total: 550000, count: 800 },
+    { title: "ML Engineer I", seniority: "Junior", base: 135000, stock: 30000, bonus: 20000, total: 185000, count: 5400 },
+    { title: "ML Engineer II", seniority: "Mid", base: 170000, stock: 55000, bonus: 35000, total: 260000, count: 6200 },
+    { title: "Senior ML Engineer", seniority: "Senior", base: 210000, stock: 95000, bonus: 55000, total: 360000, count: 3800 },
+    { title: "Staff ML Engineer", seniority: "Senior", base: 255000, stock: 150000, bonus: 80000, total: 485000, count: 1400 },
+  ],
+  pm: [
+    { title: "Associate Product Manager", seniority: "Junior", base: 115000, stock: 25000, bonus: 18000, total: 158000, count: 4200 },
+    { title: "Product Manager I", seniority: "Mid", base: 145000, stock: 40000, bonus: 28000, total: 213000, count: 6800 },
+    { title: "Product Manager II", seniority: "Mid", base: 170000, stock: 60000, bonus: 38000, total: 268000, count: 8200 },
+    { title: "Senior Product Manager", seniority: "Senior", base: 205000, stock: 95000, bonus: 55000, total: 355000, count: 6400 },
+    { title: "Staff Product Manager", seniority: "Senior", base: 240000, stock: 140000, bonus: 75000, total: 455000, count: 2200 },
+    { title: "Principal Product Manager", seniority: "Exec", base: 290000, stock: 220000, bonus: 110000, total: 620000, count: 800 },
+    { title: "Director of Product", seniority: "Exec", base: 320000, stock: 300000, bonus: 140000, total: 760000, count: 1200 },
+    { title: "VP of Product", seniority: "Exec", base: 400000, stock: 500000, bonus: 200000, total: 1100000, count: 400 },
+  ],
+  design: [
+    { title: "Product Designer I", seniority: "Junior", base: 105000, stock: 20000, bonus: 15000, total: 140000, count: 3800 },
+    { title: "Product Designer II", seniority: "Mid", base: 135000, stock: 35000, bonus: 25000, total: 195000, count: 5200 },
+    { title: "Senior Product Designer", seniority: "Senior", base: 175000, stock: 65000, bonus: 40000, total: 280000, count: 4800 },
+    { title: "Staff Product Designer", seniority: "Senior", base: 210000, stock: 100000, bonus: 60000, total: 370000, count: 1600 },
+    { title: "Principal Designer", seniority: "Exec", base: 260000, stock: 180000, bonus: 90000, total: 530000, count: 400 },
+    { title: "UX Researcher I", seniority: "Junior", base: 100000, stock: 18000, bonus: 14000, total: 132000, count: 1800 },
+    { title: "Senior UX Researcher", seniority: "Senior", base: 165000, stock: 55000, bonus: 35000, total: 255000, count: 1400 },
+  ],
+  mgmt: [
+    { title: "Engineering Manager", seniority: "Senior", base: 210000, stock: 100000, bonus: 60000, total: 370000, count: 9200 },
+    { title: "Senior Engineering Manager", seniority: "Senior", base: 255000, stock: 160000, bonus: 80000, total: 495000, count: 4800 },
+    { title: "Director of Engineering", seniority: "Exec", base: 310000, stock: 280000, bonus: 120000, total: 710000, count: 3200 },
+    { title: "Senior Director", seniority: "Exec", base: 380000, stock: 400000, bonus: 180000, total: 960000, count: 1200 },
+    { title: "VP of Engineering", seniority: "Exec", base: 450000, stock: 600000, bonus: 250000, total: 1300000, count: 600 },
+    { title: "SVP of Engineering", seniority: "Exec", base: 550000, stock: 900000, bonus: 350000, total: 1800000, count: 200 },
+  ],
+  devops: [
+    { title: "DevOps Engineer I", seniority: "Junior", base: 105000, stock: 15000, bonus: 12000, total: 132000, count: 4200 },
+    { title: "DevOps Engineer II", seniority: "Mid", base: 135000, stock: 28000, bonus: 22000, total: 185000, count: 5400 },
+    { title: "Senior DevOps Engineer", seniority: "Senior", base: 175000, stock: 55000, bonus: 35000, total: 265000, count: 3800 },
+    { title: "Staff DevOps Engineer", seniority: "Senior", base: 210000, stock: 90000, bonus: 55000, total: 355000, count: 1200 },
+    { title: "Site Reliability Engineer I", seniority: "Junior", base: 120000, stock: 25000, bonus: 18000, total: 163000, count: 3200 },
+    { title: "Site Reliability Engineer II", seniority: "Mid", base: 155000, stock: 45000, bonus: 30000, total: 230000, count: 4800 },
+    { title: "Senior SRE", seniority: "Senior", base: 195000, stock: 80000, bonus: 50000, total: 325000, count: 2800 },
+    { title: "Infrastructure Engineer", seniority: "Mid", base: 165000, stock: 50000, bonus: 32000, total: 247000, count: 3400 },
+    { title: "Platform Engineer", seniority: "Mid", base: 170000, stock: 55000, bonus: 35000, total: 260000, count: 2200 },
+  ],
+  security: [
+    { title: "Security Engineer I", seniority: "Junior", base: 115000, stock: 20000, bonus: 15000, total: 150000, count: 1800 },
+    { title: "Security Engineer II", seniority: "Mid", base: 150000, stock: 38000, bonus: 25000, total: 213000, count: 2800 },
+    { title: "Senior Security Engineer", seniority: "Senior", base: 195000, stock: 70000, bonus: 45000, total: 310000, count: 2200 },
+    { title: "Staff Security Engineer", seniority: "Senior", base: 240000, stock: 120000, bonus: 70000, total: 430000, count: 800 },
+    { title: "Principal Security Engineer", seniority: "Exec", base: 290000, stock: 200000, bonus: 100000, total: 590000, count: 300 },
+    { title: "Application Security Engineer", seniority: "Mid", base: 160000, stock: 45000, bonus: 30000, total: 235000, count: 1600 },
+    { title: "Security Architect", seniority: "Senior", base: 220000, stock: 100000, bonus: 60000, total: 380000, count: 600 },
+    { title: "CISO", seniority: "Exec", base: 350000, stock: 400000, bonus: 200000, total: 950000, count: 100 },
+  ],
+  sales: [
+    { title: "Sales Development Rep", seniority: "Junior", base: 65000, stock: 0, bonus: 35000, total: 100000, count: 8400 },
+    { title: "Account Executive I", seniority: "Mid", base: 85000, stock: 0, bonus: 65000, total: 150000, count: 6200 },
+    { title: "Account Executive II", seniority: "Mid", base: 110000, stock: 0, bonus: 90000, total: 200000, count: 4800 },
+    { title: "Senior Account Executive", seniority: "Senior", base: 140000, stock: 0, bonus: 130000, total: 270000, count: 3200 },
+    { title: "Enterprise Account Executive", seniority: "Senior", base: 170000, stock: 50000, bonus: 160000, total: 380000, count: 2400 },
+    { title: "Sales Manager", seniority: "Senior", base: 150000, stock: 40000, bonus: 100000, total: 290000, count: 1800 },
+    { title: "Director of Sales", seniority: "Exec", base: 200000, stock: 80000, bonus: 200000, total: 480000, count: 800 },
+    { title: "VP of Sales", seniority: "Exec", base: 250000, stock: 150000, bonus: 300000, total: 700000, count: 300 },
+  ],
+  hw: [
+    { title: "Hardware Engineer I", seniority: "Junior", base: 105000, stock: 18000, bonus: 12000, total: 135000, count: 3200 },
+    { title: "Hardware Engineer II", seniority: "Mid", base: 135000, stock: 30000, bonus: 22000, total: 187000, count: 4800 },
+    { title: "Senior Hardware Engineer", seniority: "Senior", base: 175000, stock: 55000, bonus: 38000, total: 268000, count: 3600 },
+    { title: "Staff Hardware Engineer", seniority: "Senior", base: 215000, stock: 95000, bonus: 60000, total: 370000, count: 1200 },
+    { title: "Principal Hardware Engineer", seniority: "Exec", base: 265000, stock: 170000, bonus: 90000, total: 525000, count: 400 },
+    { title: "ASIC Engineer", seniority: "Mid", base: 150000, stock: 40000, bonus: 25000, total: 215000, count: 2200 },
+    { title: "FPGA Engineer", seniority: "Mid", base: 145000, stock: 35000, bonus: 22000, total: 202000, count: 800 },
+    { title: "RF Engineer", seniority: "Mid", base: 140000, stock: 30000, bonus: 20000, total: 190000, count: 600 },
+    { title: "Chip Design Engineer", seniority: "Senior", base: 185000, stock: 70000, bonus: 45000, total: 300000, count: 1400 },
+  ],
+};
+
+function formatS(v) {
+  if (v >= 1000000) return "$" + (v / 1000000).toFixed(1) + "M";
+  return "$" + (v / 1000).toFixed(0) + "K";
+}
+
+function getBadge(seniority) {
+  const map = { "Junior": "badge-junior", "Mid": "badge-mid", "Senior": "badge-senior", "Exec": "badge-exec" };
+  return `<span class="seniority-badge ${map[seniority] || ''}">${seniority}</span>`;
+}
+
+function renderTitleTable(family) {
+  const data = titleData[family] || titleData.swe;
+  const table = document.getElementById('salaryTable');
+  let html = `<table>
+    <thead><tr>
+      <th>Title</th>
+      <th>Seniority</th>
+      <th style="text-align:right;">Base</th>
+      <th style="text-align:right;">Stock</th>
+      <th style="text-align:right;">Bonus</th>
+      <th style="text-align:right;">Total (TC)</th>
+      <th style="text-align:right;">Salaries</th>
+    </tr></thead><tbody>`;
+  data.forEach(d => {
+    html += `<tr>
+      <td class="title-cell">${d.title}</td>
+      <td>${getBadge(d.seniority)}</td>
+      <td class="salary-cell">${formatS(d.base)}</td>
+      <td class="salary-cell">${formatS(d.stock)}</td>
+      <td class="salary-cell">${formatS(d.bonus)}</td>
+      <td class="salary-cell" style="color:var(--color-primary-default);font-size:15px;">${formatS(d.total)}</td>
+      <td style="text-align:right;color:var(--color-text-muted);">${d.count.toLocaleString()}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  table.innerHTML = html;
+}
+
+document.querySelectorAll('.title-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.title-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderTitleTable(tab.dataset.family);
+  });
+});
+
+renderTitleTable('swe');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salary Calculator - Levels.fyi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --color-primary-default: #0060b9;
+      --color-primary-medium: #1776d2;
+      --color-primary-light: #e8f0fe;
+      --color-secondary-default: #19a672;
+      --color-text-default: #1a1a2e;
+      --color-text-secondary: #757685;
+      --color-text-muted: #9e9eae;
+      --color-neutral-100: #f5f6f8;
+      --color-neutral-200: #ebe9e9;
+      --color-neutral-300: #d4d4dc;
+      --color-bg: #eff4f9;
+      --color-white: #ffffff;
+      --color-blue-50: #e8f0fe;
+      --border-radius-default: 0.5rem;
+      --border-radius-pill: 20rem;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: linear-gradient(#eff4f9, #fff); color: var(--color-text-default); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: var(--color-primary-default); }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; font-size: inherit; }
+    .top-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+    .top-banner a { color: #64b5f6; text-decoration: underline; }
+    .navbar { background: var(--color-white); border-bottom: 1px solid var(--color-neutral-200); position: sticky; top: 0; z-index: 1000; }
+    .navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 64px; justify-content: space-between; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; color: var(--color-text-default); }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: var(--color-text-secondary); font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text-default); background: var(--color-neutral-100); }
+    .nav-links a.active { color: var(--color-primary-default); background: var(--color-blue-50); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { padding: 8px 16px; border-radius: var(--border-radius-default); font-weight: 600; font-size: 14px; }
+    .nav-btn-outline { border: 1px solid var(--color-neutral-300); color: var(--color-text-default); }
+    .nav-btn-primary { background: var(--color-primary-default); color: #fff; }
+    .nav-btn-ghost { color: var(--color-text-default); }
+    .hamburger { display: none; font-size: 24px; cursor: pointer; }
+
+    .page-header { text-align: center; padding: 40px 24px 24px; }
+    .page-header h1 { font-size: 2rem; font-weight: 800; color: #273a51; }
+    .page-header p { color: var(--color-text-secondary); margin-top: 6px; }
+
+    .page-container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+    .calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+    .calc-form { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 28px; }
+    .calc-form h2 { font-size: 18px; font-weight: 700; margin-bottom: 24px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--color-text-default); }
+    .form-group .hint { font-size: 12px; color: var(--color-text-muted); margin-bottom: 4px; }
+    .form-group input[type="range"] { width: 100%; accent-color: var(--color-primary-default); }
+    .form-group .range-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-top: 4px; }
+    .form-group .range-row .val { color: var(--color-primary-default); }
+    .form-group select { width: 100%; padding: 12px 16px; border: 2px solid var(--color-neutral-300); border-radius: var(--border-radius-default); font-size: 15px; font-family: inherit; outline: none; background: #fff; }
+    .form-group select:focus { border-color: var(--color-primary-default); }
+
+    .calc-result { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 28px; position: sticky; top: 88px; }
+    .calc-result .big-num { font-size: 48px; font-weight: 800; color: var(--color-primary-default); line-height: 1; }
+    .calc-result .big-label { font-size: 14px; color: var(--color-text-muted); margin-top: 4px; }
+    .calc-result .breakdown { margin-top: 24px; }
+    .calc-result .br-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--color-neutral-200); font-size: 15px; }
+    .calc-result .br-row:last-child { border-bottom: none; }
+    .calc-result .br-row .br-label { color: var(--color-text-secondary); }
+    .calc-result .br-row .br-val { font-weight: 700; }
+    .calc-result .br-row.total { border-top: 2px solid var(--color-primary-default); margin-top: 8px; padding-top: 16px; font-size: 17px; }
+    .calc-result .br-row.total .br-val { color: var(--color-primary-default); }
+    .calc-result .pct-bar { margin-top: 20px; height: 12px; border-radius: 6px; background: var(--color-neutral-200); overflow: hidden; display: flex; }
+    .calc-result .pct-bar .seg { height: 100%; }
+    .calc-result .pct-bar .seg-base { background: #0060b9; }
+    .calc-result .pct-bar .seg-stock { background: #19a672; }
+    .calc-result .pct-bar .seg-bonus { background: #f5a623; }
+
+    .compare-section { margin-top: 40px; }
+    .compare-section h2 { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+    .compare-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+    .compare-card { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 20px; text-align: center; cursor: pointer; transition: box-shadow 0.2s; }
+    .compare-card:hover { box-shadow: var(--shadow-md); }
+    .compare-card .cc-company { font-size: 15px; font-weight: 700; }
+    .compare-card .cc-level { font-size: 13px; color: var(--color-text-muted); }
+    .compare-card .cc-total { font-size: 22px; font-weight: 800; color: var(--color-primary-default); margin-top: 8px; }
+    .compare-card .cc-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+
+    .footer { background: #1a1a2e; color: #ccc; padding: 48px 24px 24px; margin-top: 48px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 2fr 2fr 2fr; gap: 32px; }
+    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; margin-bottom: 8px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 12px; }
+    .footer-logo svg { width: 24px; height: 24px; }
+    .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #555; border-radius: var(--border-radius-default); color: #fff; font-size: 13px; font-weight: 600; margin-top: 12px; }
+    .footer-bottom { max-width: 1280px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 13px; color: #666; }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .nav-btn-ghost, .nav-right .nav-btn-outline { display: none; }
+      .hamburger { display: block; }
+      .calc-layout { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner"><i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays <a href="#">Read More <i class="fas fa-arrow-right"></i></a></div>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</a>
+      <div class="nav-links">
+        <a href="index.html">Salaries</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="companies.html">Companies</a>
+        <a href="locations.html">Locations</a>
+        <a href="salaries.html">Titles</a>
+        <a href="calculator.html" class="active">Calculator</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+      <button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+      <button class="nav-btn nav-btn-ghost">Sign In</button>
+      <button class="nav-btn nav-btn-primary">Sign Up</button>
+      <span class="hamburger"><i class="fas fa-bars"></i></span>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <h1>Salary Calculator</h1>
+  <p>Estimate your total compensation based on role, level, and location</p>
+</div>
+
+<div class="page-container">
+  <div class="calc-layout">
+    <div class="calc-form">
+      <h2>Your Details</h2>
+
+      <div class="form-group">
+        <label>Company</label>
+        <select id="calcCompany">
+          <option value="google">Google</option>
+          <option value="meta">Meta</option>
+          <option value="amazon">Amazon</option>
+          <option value="microsoft">Microsoft</option>
+          <option value="apple">Apple</option>
+          <option value="nvidia">Nvidia</option>
+          <option value="netflix">Netflix</option>
+          <option value="uber">Uber</option>
+          <option value="stripe">Stripe</option>
+          <option value="salesforce">Salesforce</option>
+          <option value="startup">Startup (Seed-Series B)</option>
+          <option value="midmarket">Mid-Market (Series C+)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Job Title</label>
+        <select id="calcTitle">
+          <option value="swe">Software Engineer</option>
+          <option value="swe-senior">Senior Software Engineer</option>
+          <option value="swe-staff">Staff Software Engineer</option>
+          <option value="swe-principal">Principal Engineer</option>
+          <option value="em">Engineering Manager</option>
+          <option value="ds">Data Scientist</option>
+          <option value="pm">Product Manager</option>
+          <option value="design">Product Designer</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Location</label>
+        <select id="calcLocation">
+          <option value="sf">San Francisco Bay Area</option>
+          <option value="nyc">New York City</option>
+          <option value="seattle">Seattle</option>
+          <option value="la">Los Angeles</option>
+          <option value="austin">Austin</option>
+          <option value="boston">Boston</option>
+          <option value="chicago">Chicago</option>
+          <option value="denver">Denver</option>
+          <option value="remote">Remote (US)</option>
+          <option value="london">London</option>
+          <option value="toronto">Toronto</option>
+          <option value="other">Other US</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Years of Experience</label>
+        <div class="range-row">
+          <span>0</span>
+          <span class="val" id="yoeVal">5</span>
+          <span>25+</span>
+        </div>
+        <input type="range" id="yoeSlider" min="0" max="25" value="5" />
+      </div>
+
+      <div class="form-group">
+        <label>Performance Rating</label>
+        <div class="range-row">
+          <span>Below Avg</span>
+          <span class="val" id="perfVal">Meets Expectation</span>
+          <span>Exceeds</span>
+        </div>
+        <input type="range" id="perfSlider" min="0" max="4" value="2" />
+      </div>
+
+      <div class="form-group">
+        <label>Target Base Salary</label>
+        <div class="range-row">
+          <span>$80K</span>
+          <span class="val" id="baseVal">$160K</span>
+          <span>$350K</span>
+        </div>
+        <input type="range" id="baseSlider" min="80" max="350" value="160" />
+      </div>
+
+      <div class="form-group">
+        <label>Target Equity (Stock / RSUs per year)</label>
+        <div class="range-row">
+          <span>$0</span>
+          <span class="val" id="equityVal">$60K</span>
+          <span>$500K</span>
+        </div>
+        <input type="range" id="equitySlider" min="0" max="500" value="60" />
+      </div>
+
+      <div class="form-group">
+        <label>Target Bonus</label>
+        <div class="range-row">
+          <span>0%</span>
+          <span class="val" id="bonusPctVal">15%</span>
+          <span>100%</span>
+        </div>
+        <input type="range" id="bonusSlider" min="0" max="100" value="15" />
+      </div>
+    </div>
+
+    <div class="calc-result" id="calcResult">
+      <div class="big-label">Estimated Total Compensation</div>
+      <div class="big-num" id="totalTC">$235K</div>
+      <div class="big-label">per year</div>
+
+      <div class="pct-bar" id="pctBar">
+        <div class="seg seg-base" id="segBase" style="width:60%"></div>
+        <div class="seg seg-stock" id="segStock" style="width:25%"></div>
+        <div class="seg seg-bonus" id="segBonus" style="width:15%"></div>
+      </div>
+
+      <div class="breakdown">
+        <div class="br-row"><span class="br-label">Base Salary</span><span class="br-val" id="brBase">$160K</span></div>
+        <div class="br-row"><span class="br-label">Equity / RSUs</span><span class="br-val" id="brEquity">$60K</span></div>
+        <div class="br-row"><span class="br-label">Bonus</span><span class="br-val" id="brBonus">$24K</span></div>
+        <div class="br-row"><span class="br-label">Signing / Relocation</span><span class="br-val" id="brSigning">$15K</span></div>
+        <div class="br-row total">
+          <span class="br-label">Total Compensation</span>
+          <span class="br-val" id="brTotal">$259K</span>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px;background:var(--color-blue-50);border-radius:var(--border-radius-default);font-size:13px;color:var(--color-primary-default);">
+        <i class="fas fa-info-circle"></i> Adjusted for <span id="adjustNote">San Francisco Bay Area (1.0x)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-section">
+    <h2>Sample Compensation at Top Companies <span style="font-weight:400;font-size:14px;color:var(--color-text-muted);">(Software Engineer, Mid-Level)</span></h2>
+    <div class="compare-grid">
+      <div class="compare-card"><div class="cc-company">Google</div><div class="cc-level">L4</div><div class="cc-total">$269K</div><div class="cc-detail">$176K + $62K + $31K</div></div>
+      <div class="compare-card"><div class="cc-company">Meta</div><div class="cc-level">IC4</div><div class="cc-total">$276K</div><div class="cc-detail">$175K + $65K + $36K</div></div>
+      <div class="compare-card"><div class="cc-company">Amazon</div><div class="cc-level">L5</div><div class="cc-total">$239K</div><div class="cc-detail">$160K + $55K + $24K</div></div>
+      <div class="compare-card"><div class="cc-company">Microsoft</div><div class="cc-level">62</div><div class="cc-total">$212K</div><div class="cc-detail">$148K + $40K + $24K</div></div>
+      <div class="compare-card"><div class="cc-company">Apple</div><div class="cc-level">ICT3</div><div class="cc-total">$200K</div><div class="cc-detail">$145K + $38K + $17K</div></div>
+      <div class="compare-card"><div class="cc-company">Nvidia</div><div class="cc-level">IC4</div><div class="cc-total">$258K</div><div class="cc-detail">$168K + $58K + $32K</div></div>
+      <div class="compare-card"><div class="cc-company">Netflix</div><div class="cc-level">IC3</div><div class="cc-total">$275K</div><div class="cc-detail">$200K + $50K + $25K</div></div>
+      <div class="compare-card"><div class="cc-company">Uber</div><div class="cc-level">L5</div><div class="cc-total">$253K</div><div class="cc-detail">$165K + $58K + $30K</div></div>
+      <div class="compare-card"><div class="cc-company">Stripe</div><div class="cc-level">IC3</div><div class="cc-total">$252K</div><div class="cc-detail">$168K + $55K + $29K</div></div>
+      <div class="compare-card"><div class="cc-company">Salesforce</div><div class="cc-level">SMTS</div><div class="cc-total">$218K</div><div class="cc-detail">$148K + $48K + $22K</div></div>
+      <div class="compare-card"><div class="cc-company">Snowflake</div><div class="cc-level">IC3</div><div class="cc-total">$278K</div><div class="cc-detail">$175K + $68K + $35K</div></div>
+      <div class="compare-card"><div class="cc-company">Databricks</div><div class="cc-level">IC3</div><div class="cc-total">$285K</div><div class="cc-detail">$180K + $70K + $35K</div></div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</div>
+      <p>© 2017-2026 Levels Fyi Inc.</p>
+      <a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Levels.fyi</h4>
+      <a href="index.html">Home</a><a href="#">Compensation</a><a href="calculator.html">Calculator</a><a href="leaderboard.html">Top Paying</a>
+    </div>
+    <div class="footer-col">
+      <h4>Explore</h4>
+      <a href="companies.html">By Company</a><a href="locations.html">By Location</a><a href="salaries.html">By Title</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Blog</a><a href="#">Terms</a><a href="#">Privacy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2017-2026 Levels Fyi Inc.</div>
+</footer>
+
+<script>
+const perfLabels = ["Below Average", "Meets Some", "Meets Expectation", "Exceeds Some", "Exceeds Expectation"];
+
+function fmt(v) { return "$" + (v >= 1000 ? (v / 1000).toFixed(0) + "K" : v.toFixed(0)); }
+
+const locationMultiplier = {
+  sf: 1.0, nyc: 0.95, seattle: 0.92, la: 0.85, austin: 0.82,
+  boston: 0.88, chicago: 0.80, denver: 0.78, remote: 0.90, london: 0.75, toronto: 0.70, other: 0.75
+};
+const locationNames = {
+  sf: "San Francisco Bay Area (1.0x)", nyc: "New York City (0.95x)", seattle: "Seattle (0.92x)",
+  la: "Los Angeles (0.85x)", austin: "Austin (0.82x)", boston: "Boston (0.88x)",
+  chicago: "Chicago (0.80x)", denver: "Denver (0.78x)", remote: "Remote US (0.90x)",
+  london: "London (0.75x)", toronto: "Toronto (0.70x)", other: "Other US (0.75x)"
+};
+
+function calculate() {
+  const base = parseInt(document.getElementById('baseSlider').value) * 1000;
+  const equity = parseInt(document.getElementById('equitySlider').value) * 1000;
+  const bonusPct = parseInt(document.getElementById('bonusSlider').value) / 100;
+  const yoe = parseInt(document.getElementById('yoeSlider').value);
+  const perf = parseInt(document.getElementById('perfSlider').value);
+  const loc = document.getElementById('calcLocation').value;
+  const company = document.getElementById('calcCompany').value;
+  const title = document.getElementById('calcTitle').value;
+
+  const locMult = locationMultiplier[loc] || 1.0;
+  const perfMult = 0.85 + (perf / 4) * 0.3;
+  const yoeMult = Math.min(1.5, 0.7 + (yoe / 25) * 0.8);
+
+  let companyMult = 1.0;
+  if (company === 'netflix') companyMult = 1.3;
+  else if (company === 'nvidia') companyMult = 1.15;
+  else if (company === 'meta') companyMult = 1.12;
+  else if (company === 'google') companyMult = 1.1;
+  else if (company === 'stripe') companyMult = 1.08;
+  else if (company === 'apple') companyMult = 1.05;
+  else if (company === 'amazon') companyMult = 1.0;
+  else if (company === 'uber') companyMult = 0.98;
+  else if (company === 'microsoft') companyMult = 0.92;
+  else if (company === 'salesforce') companyMult = 0.9;
+  else if (company === 'startup') companyMult = 0.75;
+  else if (company === 'midmarket') companyMult = 0.85;
+
+  let titleMult = 1.0;
+  if (title === 'swe-senior') titleMult = 1.3;
+  else if (title === 'swe-staff') titleMult = 1.7;
+  else if (title === 'swe-principal') titleMult = 2.2;
+  else if (title === 'em') titleMult = 1.5;
+  else if (title === 'ds') titleMult = 0.95;
+  else if (title === 'pm') titleMult = 1.0;
+  else if (title === 'design') titleMult = 0.9;
+
+  const adjustedBase = Math.round(base * locMult * perfMult * companyMult * titleMult);
+  const adjustedEquity = Math.round(equity * locMult * companyMult * titleMult);
+  const bonus = Math.round(adjustedBase * bonusPct);
+  const signing = Math.round(15000 * companyMult * (perf >= 3 ? 1.5 : 1.0));
+  const total = adjustedBase + adjustedEquity + bonus + signing;
+
+  const totalBase = adjustedBase + bonus + signing;
+
+  const basePct = (adjustedBase / total * 100);
+  const eqPct = (adjustedEquity / total * 100);
+  const bonusPctShow = (bonus / total * 100);
+
+  document.getElementById('totalTC').textContent = fmt(total);
+  document.getElementById('brBase').textContent = fmt(adjustedBase);
+  document.getElementById('brEquity').textContent = fmt(adjustedEquity);
+  document.getElementById('brBonus').textContent = fmt(bonus);
+  document.getElementById('brSigning').textContent = fmt(signing);
+  document.getElementById('brTotal').textContent = fmt(total);
+  document.getElementById('adjustNote').textContent = locationNames[loc] || "US Average";
+
+  document.getElementById('segBase').style.width = basePct + '%';
+  document.getElementById('segStock').style.width = eqPct + '%';
+  document.getElementById('segBonus').style.width = bonusPctShow + '%';
+}
+
+document.getElementById('yoeSlider').addEventListener('input', function() {
+  document.getElementById('yoeVal').textContent = this.value;
+  calculate();
+});
+document.getElementById('perfSlider').addEventListener('input', function() {
+  document.getElementById('perfVal').textContent = perfLabels[this.value];
+  calculate();
+});
+document.getElementById('baseSlider').addEventListener('input', function() {
+  document.getElementById('baseVal').textContent = fmt(parseInt(this.value) * 1000);
+  calculate();
+});
+document.getElementById('equitySlider').addEventListener('input', function() {
+  document.getElementById('equityVal').textContent = fmt(parseInt(this.value) * 1000);
+  calculate();
+});
+document.getElementById('bonusSlider').addEventListener('input', function() {
+  document.getElementById('bonusPctVal').textContent = this.value + '%';
+  calculate();
+});
+
+document.getElementById('calcCompany').addEventListener('change', calculate);
+document.getElementById('calcTitle').addEventListener('change', calculate);
+document.getElementById('calcLocation').addEventListener('change', calculate);
+
+calculate();
+</script>
+
+</body>
+</html>

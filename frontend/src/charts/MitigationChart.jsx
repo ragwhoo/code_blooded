@@ -45,7 +45,7 @@ export default function MitigationChart({ data: propData, loading }) {
           <Pie data={propData} cx="50%" cy="50%" innerRadius={60} outerRadius={100} paddingAngle={4} dataKey="value" strokeWidth={2} stroke="#050816">
             {propData.map((_, i) => <Cell key={i} fill={`url(#pie${i % gradients.length})`} />)}
           </Pie>
-          <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#FFFFFF', fontSize: '12px', fontWeight: 700, padding: '12px' }} />
+          <Tooltip contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#FFFFFF', fontSize: '12px', fontWeight: 700, padding: '12px' }} itemStyle={{ color: '#FFFFFF' }} labelStyle={{ color: '#FFFFFF' }} />
           <Legend wrapperStyle={{ fontSize: '11px', fontWeight: 600, color: '#A1A1AA' }} iconType="circle" iconSize={8} />
         </PieChart>
       </ResponsiveContainer>

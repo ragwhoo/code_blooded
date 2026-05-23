@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { TrendingUp, TrendingDown } from 'lucide-react'
-
 function formatValue(value) {
   if (value === null || value === undefined) return '—'
   if (typeof value === 'number') {
@@ -12,7 +10,7 @@ function formatValue(value) {
   return value
 }
 
-export default function StatCard({ title, value, icon, color = 'primary', trend, subtitle, loading }) {
+export default function StatCard({ title, value, icon, color = 'primary', subtitle, loading }) {
   const [displayValue, setDisplayValue] = useState(value)
   const prevValue = useRef(value)
 
@@ -69,12 +67,6 @@ export default function StatCard({ title, value, icon, color = 'primary', trend,
       </div>
       <div className="flex items-baseline gap-2">
         <span className="text-[32px] font-bold text-white stat-value leading-none">{formatValue(displayValue)}</span>
-        {trend !== null && trend !== undefined && trend !== 0 && (
-          <span className={`flex items-center text-sm font-semibold ${trend > 0 ? 'text-[#22C55E]' : 'text-[#EF4444]'}`}>
-            {trend > 0 ? <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> : <TrendingDown className="w-3.5 h-3.5 mr-0.5" />}
-            {Math.abs(trend)}%
-          </span>
-        )}
       </div>
       {subtitle && (
         <p className="mt-1 text-xs font-medium text-white/35">{subtitle}</p>

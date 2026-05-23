@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -25,7 +24,6 @@ public class FeatureExtractionService {
     @Autowired
     private StringRedisTemplate redis;
 
-    @Async
     public void asyncProcess(String sessionId, String path) {
         long now = System.currentTimeMillis();
         redis.opsForZSet().add(String.format(TIMESTAMPS_KEY, sessionId), String.valueOf(now), now);

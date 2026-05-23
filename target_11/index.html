@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Levels.fyi - Software Engineer Levels & Salary Data</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    :root {
+      --color-primary-default: #0060b9;
+      --color-primary-medium: #1776d2;
+      --color-primary-light: #e8f0fe;
+      --color-secondary-default: #19a672;
+      --color-text-default: #1a1a2e;
+      --color-text-secondary: #757685;
+      --color-text-muted: #9e9eae;
+      --color-neutral-100: #f5f6f8;
+      --color-neutral-200: #ebe9e9;
+      --color-neutral-300: #d4d4dc;
+      --color-bg: #eff4f9;
+      --color-white: #ffffff;
+      --color-blue-50: #e8f0fe;
+      --color-blue-100: #d2e3fc;
+      --spacing-1: 0.25rem;
+      --spacing-2: 0.5rem;
+      --spacing-3: 0.75rem;
+      --spacing-4: 0.75rem;
+      --spacing-5: 0.75rem;
+      --spacing-6: 1rem;
+      --spacing-7: 1.25rem;
+      --spacing-8: 1.5rem;
+      --spacing-9: 2rem;
+      --spacing-10: 2.5rem;
+      --spacing-12: 3rem;
+      --border-radius-default: 0.5rem;
+      --border-radius-pill: 20rem;
+      --border-radius-circle: 50%;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+      --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(#eff4f9, #fff);
+      color: var(--color-text-default);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: var(--color-primary-default); }
+    button { cursor: pointer; font-family: inherit; border: none; background: none; font-size: inherit; }
+    img { max-width: 100%; }
+
+    .top-banner { background: #1a1a2e; color: #fff; text-align: center; padding: 8px 16px; font-size: 14px; font-weight: 500; }
+    .top-banner a { color: #64b5f6; text-decoration: underline; }
+    .top-banner i { margin: 0 4px; }
+
+    .navbar { background: var(--color-white); border-bottom: 1px solid var(--color-neutral-200); position: sticky; top: 0; z-index: 1000; }
+    .navbar-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; height: 64px; justify-content: space-between; }
+    .nav-left { display: flex; align-items: center; gap: 32px; }
+    .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; color: var(--color-text-default); }
+    .nav-logo svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { color: var(--color-text-secondary); font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: 6px; transition: all 0.15s; }
+    .nav-links a:hover { color: var(--color-text-default); background: var(--color-neutral-100); }
+    .nav-links a.active { color: var(--color-primary-default); background: var(--color-blue-50); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-btn { padding: 8px 16px; border-radius: var(--border-radius-default); font-weight: 600; font-size: 14px; }
+    .nav-btn-outline { border: 1px solid var(--color-neutral-300); color: var(--color-text-default); }
+    .nav-btn-outline:hover { border-color: var(--color-primary-default); color: var(--color-primary-default); }
+    .nav-btn-primary { background: var(--color-primary-default); color: #fff; }
+    .nav-btn-primary:hover { background: var(--color-primary-medium); }
+    .nav-btn-ghost { color: var(--color-text-default); }
+
+    .hero { text-align: center; padding: 48px 24px 32px; max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 2.25rem; font-weight: 800; color: #273a51; line-height: 1.2; }
+    .hero p { color: var(--color-text-secondary); font-size: 1.15rem; margin-top: 8px; }
+
+    .search-bar { max-width: 600px; margin: 20px auto 0; position: relative; }
+    .search-bar input { width: 100%; padding: 14px 20px 14px 48px; border: 2px solid var(--color-neutral-300); border-radius: var(--border-radius-pill); font-size: 16px; font-family: inherit; outline: none; background: var(--color-white); transition: border-color 0.2s; }
+    .search-bar input:focus { border-color: var(--color-primary-default); }
+    .search-bar i { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); font-size: 18px; }
+
+    .value-props { display: flex; justify-content: center; gap: 16px; padding: 24px; max-width: 700px; margin: 0 auto; }
+    .value-prop { flex: 1; background: var(--color-white); border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 16px; text-align: center; cursor: pointer; transition: box-shadow 0.2s; }
+    .value-prop:hover { box-shadow: var(--shadow-md); }
+    .value-prop i { font-size: 20px; color: var(--color-primary-default); }
+    .value-prop strong { display: block; margin-top: 4px; font-size: 14px; }
+    .value-prop small { color: var(--color-text-secondary); font-size: 12px; }
+
+    .page-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    .quick-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 16px 0 24px; }
+    .quick-link { display: flex; align-items: center; gap: 6px; padding: 10px 20px; background: var(--color-white); border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-pill); font-size: 14px; font-weight: 600; color: var(--color-text-default); transition: all 0.2s; }
+    .quick-link:hover { border-color: var(--color-primary-default); color: var(--color-primary-default); box-shadow: var(--shadow-sm); }
+    .quick-link i { font-size: 16px; }
+
+    .industry-tabs { display: flex; gap: 4px; overflow-x: auto; padding: 8px 0; -ms-overflow-style: none; scrollbar-width: none; }
+    .industry-tabs::-webkit-scrollbar { display: none; }
+    .industry-tab { padding: 8px 16px; border-radius: var(--border-radius-pill); font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--color-text-secondary); transition: all 0.2s; }
+    .industry-tab:hover { background: var(--color-neutral-100); color: var(--color-text-default); }
+    .industry-tab.active { background: var(--color-primary-default); color: #fff; font-weight: 600; }
+
+    .job-family-wrapper { position: relative; margin-top: 8px; }
+    .job-family-tabs { display: flex; gap: 4px; overflow-x: auto; border-bottom: 2px solid var(--color-neutral-200); -ms-overflow-style: none; scrollbar-width: none; }
+    .job-family-tabs::-webkit-scrollbar { display: none; }
+    .job-family-tab { padding: 12px 16px; font-size: 14px; font-weight: 500; white-space: nowrap; color: var(--color-text-secondary); position: relative; transition: all 0.2s; }
+    .job-family-tab:hover { color: var(--color-text-default); }
+    .job-family-tab.active { color: #214073; font-weight: 700; }
+    .job-family-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 3px; background: #214073; border-radius: 2px 2px 0 0; }
+    .job-family-fade { position: absolute; right: 0; top: 0; bottom: 0; width: 48px; background: linear-gradient(to right, transparent, var(--color-bg)); pointer-events: none; }
+
+    .toggle-wrapper { margin-top: var(--spacing-9); }
+    .toggle-bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 2rem; }
+    .toggle-group { background: #eee; border-radius: 8px; padding: 4px; display: flex; height: 40px; }
+    .toggle-btn { padding: 6px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; color: var(--color-text-secondary); transition: all 0.15s; }
+    .toggle-btn.active { background: #fff; color: #0060b9; box-shadow: var(--shadow-sm); }
+
+    .leveling-diagram { margin-top: 8px; }
+    .controls-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+    .company-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .company-btn { display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--color-neutral-300); border-radius: var(--border-radius-pill); background: #fff; height: 36px; font-size: 14px; font-weight: 500; color: var(--color-text-default); transition: all 0.2s; max-width: 175px; }
+    .company-btn:hover { border-color: var(--color-primary-default); box-shadow: var(--shadow-sm); }
+    .company-btn.active { border-color: var(--color-primary-default); background: var(--color-primary-light); }
+    .company-btn img { width: 20px; height: 20px; border-radius: 4px; }
+    .company-btn.more { color: var(--color-text-muted); }
+    .company-btn.more i { font-size: 12px; margin-left: 4px; }
+    .location-selector { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1px solid var(--color-neutral-300); border-radius: var(--border-radius-default); background: #fff; font-size: 14px; color: var(--color-text-default); }
+    .location-selector span { color: var(--color-text-muted); }
+    .location-selector i { font-size: 12px; }
+
+    .leveling-visual { display: flex; gap: 12px; height: 800px; max-height: 800px; overflow-y: auto; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); background: #fff; padding: 20px; }
+    .company-column { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .company-column-header { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 16px 8px; border-bottom: 2px solid var(--color-neutral-200); margin-bottom: 8px; }
+    .company-column-header h3 { font-size: 14px; font-weight: 700; color: var(--color-text-default); }
+    .company-column-header small { font-size: 11px; color: var(--color-text-muted); }
+    .level-row { display: flex; flex-direction: column; align-items: center; padding: 10px 6px; margin: 2px 0; border-radius: var(--border-radius-default); transition: background 0.15s; cursor: pointer; min-height: 70px; justify-content: center; }
+    .level-row:hover { background: var(--color-primary-light); }
+    .level-row .level-name { font-size: 13px; font-weight: 700; color: var(--color-text-default); }
+    .level-row .level-total { font-size: 13px; font-weight: 700; color: var(--color-primary-default); }
+    .level-row .level-breakdown { font-size: 11px; color: var(--color-text-muted); text-align: center; line-height: 1.3; }
+    .level-row .level-years { font-size: 10px; color: var(--color-text-muted); margin-top: 2px; }
+    .level-row.has-top-border { border-top: 1px solid var(--color-neutral-200); }
+
+    .recent-section { max-width: 1280px; margin: 40px auto 0; padding: 0 24px; }
+    .recent-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .recent-header h2 { font-size: 20px; font-weight: 700; }
+    .recent-header a { font-size: 14px; font-weight: 600; }
+    .recent-pills { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 8px; -ms-overflow-style: none; scrollbar-width: none; }
+    .recent-pills::-webkit-scrollbar { display: none; }
+    .salary-pill { flex: 0 0 170px; background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 14px; height: 140px; display: flex; flex-direction: column; justify-content: center; cursor: pointer; transition: box-shadow 0.2s; }
+    .salary-pill:hover { box-shadow: var(--shadow-md); }
+    .salary-pill .sp-company { font-size: 13px; font-weight: 700; }
+    .salary-pill .sp-title { font-size: 11px; color: var(--color-text-secondary); }
+    .salary-pill .sp-salary { font-size: 14px; font-weight: 700; color: var(--color-primary-default); margin-top: 4px; }
+    .salary-pill .sp-location { font-size: 10px; color: var(--color-text-muted); }
+    .add-salary-pill { flex: 0 0 170px; border: 2px dashed var(--color-neutral-300); border-radius: var(--border-radius-default); height: 140px; display: flex; align-items: center; justify-content: center; gap: 6px; color: var(--color-text-muted); font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; }
+    .add-salary-pill:hover { border-color: var(--color-primary-default); color: var(--color-primary-default); }
+
+    .explore-section { max-width: 1280px; margin: 48px auto 0; padding: 0 24px; }
+    .explore-section h2 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+    .explore-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+    .explore-card { flex: 0 0 140px; background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 14px 12px; text-align: center; cursor: pointer; transition: box-shadow 0.2s; }
+    .explore-card:hover { box-shadow: var(--shadow-md); }
+    .explore-card i { font-size: 24px; color: var(--color-primary-default); }
+    .explore-card .ec-title { font-size: 12px; font-weight: 600; margin-top: 6px; }
+    .explore-card .ec-sub { font-size: 11px; color: var(--color-text-muted); }
+
+    .employers-section { max-width: 1280px; margin: 48px auto 0; padding: 0 24px 48px; }
+    .employers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .employer-card { background: #fff; border: 1px solid var(--color-neutral-200); border-radius: var(--border-radius-default); padding: 28px 24px; cursor: pointer; transition: box-shadow 0.2s; }
+    .employer-card:hover { box-shadow: var(--shadow-md); }
+    .employer-card .ec-icon { width: 48px; height: 48px; border-radius: var(--border-radius-circle); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 16px; }
+    .employer-card .ec-icon.blue { background: #e8f0fe; color: var(--color-primary-default); }
+    .employer-card .ec-icon.purple { background: #f0e8ff; color: #7b2ff7; }
+    .employer-card .ec-icon.teal { background: #e0f7f4; color: var(--color-secondary-default); }
+    .employer-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .employer-card p { font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; }
+    .employer-card .ec-link { display: flex; align-items: center; gap: 6px; margin-top: 16px; font-size: 14px; font-weight: 600; }
+
+    .footer { background: #1a1a2e; color: #ccc; padding: 48px 24px 24px; margin-top: 48px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr 2fr 2fr 2fr; gap: 32px; }
+    .footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+    .footer-col a { display: block; color: #999; font-size: 13px; margin-bottom: 8px; }
+    .footer-col a:hover { color: #fff; }
+    .footer-col p { font-size: 13px; color: #999; margin-bottom: 8px; }
+    .footer-logo { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 18px; color: #fff; margin-bottom: 12px; }
+    .footer-logo svg { width: 24px; height: 24px; }
+    .footer-app-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid #555; border-radius: var(--border-radius-default); color: #fff; font-size: 13px; font-weight: 600; margin-top: 12px; }
+    .footer-app-btn:hover { border-color: #fff; }
+    .footer-bottom { max-width: 1280px; margin: 32px auto 0; padding-top: 16px; border-top: 1px solid #333; text-align: center; font-size: 13px; color: #666; }
+
+    .hamburger { display: none; font-size: 24px; cursor: pointer; }
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .nav-btn-ghost, .nav-right .nav-btn-outline { display: none; }
+      .hamburger { display: block; }
+      .value-props { flex-direction: column; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .leveling-visual { height: 600px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-banner">
+  <i class="fas fa-bullhorn"></i> Levels.fyi has acquired TechPays
+  <a href="#">Read More <i class="fas fa-arrow-right"></i></a>
+</div>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="nav-left">
+      <a href="index.html" class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4,7 12,3 20,7" />
+          <polyline points="4,12 12,8 20,12" />
+          <polyline points="4,17 12,13 20,17" />
+        </svg>
+        Levels.fyi
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="active">Salaries</a>
+        <a href="leaderboard.html">Leaderboard</a>
+        <a href="companies.html">Companies</a>
+        <a href="locations.html">Locations</a>
+        <a href="salaries.html">Titles</a>
+        <a href="calculator.html">Calculator</a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-btn nav-btn-ghost"><i class="fas fa-download"></i> App</button>
+      <button class="nav-btn nav-btn-outline"><i class="fas fa-dollar-sign"></i> USD</button>
+      <button class="nav-btn nav-btn-ghost">Sign In</button>
+      <button class="nav-btn nav-btn-primary">Sign Up</button>
+      <span class="hamburger"><i class="fas fa-bars"></i></span>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Get Paid, Not Played</h1>
+  <p>Insights on companies, salaries, jobs and more!</p>
+  <div class="search-bar">
+    <i class="fas fa-search"></i>
+    <input type="text" placeholder="Search by Company, Title, or City" id="globalSearch" />
+  </div>
+</section>
+
+<div class="value-props">
+  <div class="value-prop">
+    <i class="fas fa-calendar-check"></i>
+    <strong>Get Hired</strong>
+    <small>Interviews on your calendar. You set the bar.</small>
+  </div>
+  <div class="value-prop">
+    <i class="fas fa-upload"></i>
+    <strong>Upload Resume</strong>
+    <small>Get discovered by top companies.</small>
+  </div>
+  <div class="value-prop">
+    <i class="fas fa-handshake"></i>
+    <strong>Negotiate</strong>
+    <small>$10K+ guaranteed or money back</small>
+  </div>
+</div>
+
+<div class="quick-links">
+  <a href="companies.html" class="quick-link"><i class="fas fa-building"></i> By Company</a>
+  <a href="locations.html" class="quick-link"><i class="fas fa-map-marker-alt"></i> By Location</a>
+  <a href="salaries.html" class="quick-link"><i class="fas fa-briefcase"></i> By Title</a>
+  <a href="leaderboard.html" class="quick-link"><i class="fas fa-trophy"></i> Top Paying</a>
+  <a href="calculator.html" class="quick-link"><i class="fas fa-calculator"></i> Salary Calculator</a>
+</div>
+
+<div class="page-container">
+
+  <div class="industry-tabs">
+    <button class="industry-tab active">Tech</button>
+    <button class="industry-tab">Healthcare</button>
+    <button class="industry-tab">Finance</button>
+    <button class="industry-tab">Biotechnology</button>
+    <button class="industry-tab">Pharmaceutical</button>
+    <button class="industry-tab">Retail</button>
+    <button class="industry-tab">Manufacturing</button>
+    <button class="industry-tab">Management Consulting</button>
+    <button class="industry-tab">Medical Devices</button>
+    <button class="industry-tab">More <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px;"></i></button>
+  </div>
+
+  <div class="job-family-wrapper">
+    <div class="job-family-tabs">
+      <button class="job-family-tab active">Software Engineer</button>
+      <button class="job-family-tab">Hardware Engineer</button>
+      <button class="job-family-tab">Product Designer</button>
+      <button class="job-family-tab">Product Manager</button>
+      <button class="job-family-tab">Data Scientist</button>
+      <button class="job-family-tab">Software Engineering Manager</button>
+      <button class="job-family-tab">Sales</button>
+      <button class="job-family-tab">DevOps</button>
+      <button class="job-family-tab">Security</button>
+    </div>
+    <div class="job-family-fade"></div>
+  </div>
+
+  <div class="toggle-wrapper">
+    <div class="toggle-bar">
+      <div class="toggle-group">
+        <button class="toggle-btn active">Levels</button>
+        <button class="toggle-btn">Salaries</button>
+      </div>
+    </div>
+
+    <div class="leveling-diagram">
+      <div class="controls-row">
+        <div class="company-buttons">
+          <button class="company-btn active"><img src="https://logo.clearbit.com/google.com" alt="" onerror="this.style.display='none'"> Google</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/meta.com" alt="" onerror="this.style.display='none'"> Meta</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/amazon.com" alt="" onerror="this.style.display='none'"> Amazon</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/microsoft.com" alt="" onerror="this.style.display='none'"> Microsoft</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/apple.com" alt="" onerror="this.style.display='none'"> Apple</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/nvidia.com" alt="" onerror="this.style.display='none'"> Nvidia</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/netflix.com" alt="" onerror="this.style.display='none'"> Netflix</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/uber.com" alt="" onerror="this.style.display='none'"> Uber</button>
+          <button class="company-btn"><img src="https://logo.clearbit.com/stripe.com" alt="" onerror="this.style.display='none'"> Stripe</button>
+          <button class="company-btn more">More <i class="fas fa-chevron-down"></i></button>
+        </div>
+        <button class="location-selector"><i class="fas fa-globe"></i> Location <span>United States</span> <i class="fas fa-chevron-down"></i></button>
+      </div>
+
+      <div class="leveling-visual" id="levelingVisual">
+        <!-- Google -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Google</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">L3</div><div class="level-total">$192K</div><div class="level-breakdown">$135K + $38K + $19K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">L4</div><div class="level-total">$269K</div><div class="level-breakdown">$176K + $62K + $31K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">L5</div><div class="level-total">$367K</div><div class="level-breakdown">$215K + $100K + $52K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">L6</div><div class="level-total">$488K</div><div class="level-breakdown">$245K + $150K + $93K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">L7</div><div class="level-total">$650K</div><div class="level-breakdown">$285K + $220K + $145K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">L8</div><div class="level-total">$897K</div><div class="level-breakdown">$325K + $350K + $222K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">L9</div><div class="level-total">$1.2M</div><div class="level-breakdown">$375K + $500K + $325K</div><div class="level-years">20+ yrs</div></div>
+          <div class="level-row"><div class="level-name">L10</div><div class="level-total">$1.8M</div><div class="level-breakdown">$450K + $750K + $600K</div><div class="level-years">20+ yrs</div></div>
+        </div>
+        <!-- Meta -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Meta</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">IC3</div><div class="level-total">$188K</div><div class="level-breakdown">$135K + $35K + $18K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC4</div><div class="level-total">$276K</div><div class="level-breakdown">$175K + $65K + $36K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC5</div><div class="level-total">$399K</div><div class="level-breakdown">$210K + $120K + $69K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC6</div><div class="level-total">$588K</div><div class="level-breakdown">$260K + $200K + $128K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC7</div><div class="level-total">$839K</div><div class="level-breakdown">$310K + $320K + $209K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">M1</div><div class="level-total">$428K</div><div class="level-breakdown">$230K + $130K + $68K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">M2</div><div class="level-total">$651K</div><div class="level-breakdown">$285K + $230K + $136K</div><div class="level-years">10+ yrs</div></div>
+        </div>
+        <!-- Amazon -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Amazon</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">L4</div><div class="level-total">$159K</div><div class="level-breakdown">$118K + $28K + $13K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">L5</div><div class="level-total">$239K</div><div class="level-breakdown">$160K + $55K + $24K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">L6</div><div class="level-total">$361K</div><div class="level-breakdown">$200K + $105K + $56K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">L7</div><div class="level-total">$540K</div><div class="level-breakdown">$250K + $180K + $110K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">L8</div><div class="level-total">$790K</div><div class="level-breakdown">$300K + $300K + $190K</div><div class="level-years">15+ yrs</div></div>
+        </div>
+        <!-- Microsoft -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Microsoft</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">59</div><div class="level-total">$121K</div><div class="level-breakdown">$95K + $16K + $10K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">60</div><div class="level-total">$141K</div><div class="level-breakdown">$108K + $20K + $13K</div><div class="level-years">1-3 yrs</div></div>
+          <div class="level-row"><div class="level-name">61</div><div class="level-total">$170K</div><div class="level-breakdown">$125K + $28K + $17K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">62</div><div class="level-total">$212K</div><div class="level-breakdown">$148K + $40K + $24K</div><div class="level-years">5-8 yrs</div></div>
+          <div class="level-row"><div class="level-name">63</div><div class="level-total">$268K</div><div class="level-breakdown">$175K + $60K + $33K</div><div class="level-years">8-12 yrs</div></div>
+          <div class="level-row"><div class="level-name">64</div><div class="level-total">$338K</div><div class="level-breakdown">$200K + $85K + $53K</div><div class="level-years">12-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">65</div><div class="level-total">$432K</div><div class="level-breakdown">$235K + $120K + $77K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">66</div><div class="level-total">$558K</div><div class="level-breakdown">$270K + $170K + $118K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">67</div><div class="level-total">$711K</div><div class="level-breakdown">$310K + $240K + $161K</div><div class="level-years">20+ yrs</div></div>
+          <div class="level-row"><div class="level-name">68</div><div class="level-total">$890K</div><div class="level-breakdown">$350K + $310K + $230K</div><div class="level-years">20+ yrs</div></div>
+        </div>
+        <!-- Apple -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Apple</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">ICT2</div><div class="level-total">$140K</div><div class="level-breakdown">$110K + $20K + $10K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">ICT3</div><div class="level-total">$200K</div><div class="level-breakdown">$145K + $38K + $17K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">ICT4</div><div class="level-total">$293K</div><div class="level-breakdown">$185K + $70K + $38K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">ICT5</div><div class="level-total">$432K</div><div class="level-breakdown">$230K + $130K + $72K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">ICT6</div><div class="level-total">$633K</div><div class="level-breakdown">$270K + $220K + $143K</div><div class="level-years">15+ yrs</div></div>
+        </div>
+        <!-- Nvidia -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Nvidia</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">IC3</div><div class="level-total">$176K</div><div class="level-breakdown">$130K + $30K + $16K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC4</div><div class="level-total">$258K</div><div class="level-breakdown">$168K + $58K + $32K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC5</div><div class="level-total">$381K</div><div class="level-breakdown">$215K + $105K + $61K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC6</div><div class="level-total">$540K</div><div class="level-breakdown">$260K + $175K + $105K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC7</div><div class="level-total">$780K</div><div class="level-breakdown">$320K + $280K + $180K</div><div class="level-years">15+ yrs</div></div>
+          <div class="level-row"><div class="level-name">IC8</div><div class="level-total">$1.1M</div><div class="level-breakdown">$380K + $420K + $300K</div><div class="level-years">15+ yrs</div></div>
+        </div>
+        <!-- Netflix -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Netflix</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">IC3</div><div class="level-total">$275K</div><div class="level-breakdown">$200K + $50K + $25K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC4</div><div class="level-total">$400K</div><div class="level-breakdown">$280K + $80K + $40K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC5</div><div class="level-total">$580K</div><div class="level-breakdown">$380K + $120K + $80K</div><div class="level-years">10-15 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC6</div><div class="level-total">$830K</div><div class="level-breakdown">$500K + $200K + $130K</div><div class="level-years">15+ yrs</div></div>
+        </div>
+        <!-- Uber -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Uber</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">L4</div><div class="level-total">$169K</div><div class="level-breakdown">$125K + $28K + $16K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">L5</div><div class="level-total">$253K</div><div class="level-breakdown">$165K + $58K + $30K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">L6</div><div class="level-total">$388K</div><div class="level-breakdown">$210K + $115K + $63K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">L7</div><div class="level-total">$575K</div><div class="level-breakdown">$265K + $190K + $120K</div><div class="level-years">10+ yrs</div></div>
+        </div>
+        <!-- Stripe -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Stripe</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">IC2</div><div class="level-total">$181K</div><div class="level-breakdown">$135K + $30K + $16K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC3</div><div class="level-total">$252K</div><div class="level-breakdown">$168K + $55K + $29K</div><div class="level-years">2-4 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC4</div><div class="level-total">$345K</div><div class="level-breakdown">$205K + $92K + $48K</div><div class="level-years">4-8 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC5</div><div class="level-total">$482K</div><div class="level-breakdown">$248K + $145K + $89K</div><div class="level-years">8-12 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC6</div><div class="level-total">$665K</div><div class="level-breakdown">$295K + $220K + $150K</div><div class="level-years">12+ yrs</div></div>
+        </div>
+        <!-- Salesforce -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Salesforce</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">AMTS</div><div class="level-total">$128K</div><div class="level-breakdown">$98K + $18K + $12K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">MTS</div><div class="level-total">$165K</div><div class="level-breakdown">$120K + $30K + $15K</div><div class="level-years">2-4 yrs</div></div>
+          <div class="level-row"><div class="level-name">SMTS</div><div class="level-total">$218K</div><div class="level-breakdown">$148K + $48K + $22K</div><div class="level-years">4-7 yrs</div></div>
+          <div class="level-row"><div class="level-name">LMTS</div><div class="level-total">$285K</div><div class="level-breakdown">$178K + $72K + $35K</div><div class="level-years">7-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">EMTS</div><div class="level-total">$365K</div><div class="level-breakdown">$210K + $105K + $50K</div><div class="level-years">10+ yrs</div></div>
+        </div>
+        <!-- Snowflake -->
+        <div class="company-column">
+          <div class="company-column-header"><h3>Snowflake</h3><small>Software Engineer</small></div>
+          <div class="level-row has-top-border"><div class="level-name">IC2</div><div class="level-total">$195K</div><div class="level-breakdown">$140K + $35K + $20K</div><div class="level-years">0-2 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC3</div><div class="level-total">$278K</div><div class="level-breakdown">$175K + $68K + $35K</div><div class="level-years">2-5 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC4</div><div class="level-total">$395K</div><div class="level-breakdown">$220K + $115K + $60K</div><div class="level-years">5-10 yrs</div></div>
+          <div class="level-row"><div class="level-name">IC5</div><div class="level-total">$545K</div><div class="level-breakdown">$265K + $175K + $105K</div><div class="level-years">10+ yrs</div></div>
+          <div class="level-row"><div class="level-name">IC6</div><div class="level-total">$735K</div><div class="level-breakdown">$310K + $260K + $165K</div><div class="level-years">12+ yrs</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="recent-section">
+  <div class="recent-header">
+    <h2>Recent Salary Submissions</h2>
+    <a href="#">View all <i class="fas fa-arrow-right" style="font-size:12px;"></i></a>
+  </div>
+  <div class="recent-pills">
+    <div class="salary-pill"><div class="sp-company">Google</div><div class="sp-title">Senior Software Engineer</div><div class="sp-salary">$385K</div><div class="sp-location">Mountain View, CA</div></div>
+    <div class="salary-pill"><div class="sp-company">Meta</div><div class="sp-title">Software Engineer</div><div class="sp-salary">$278K</div><div class="sp-location">Menlo Park, CA</div></div>
+    <div class="salary-pill"><div class="sp-company">Amazon</div><div class="sp-title">SDE II</div><div class="sp-salary">$235K</div><div class="sp-location">Seattle, WA</div></div>
+    <div class="salary-pill"><div class="sp-company">Apple</div><div class="sp-title">Software Engineer</div><div class="sp-salary">$310K</div><div class="sp-location">Cupertino, CA</div></div>
+    <div class="salary-pill"><div class="sp-company">Microsoft</div><div class="sp-title">Senior SWE</div><div class="sp-salary">$255K</div><div class="sp-location">Redmond, WA</div></div>
+    <div class="salary-pill"><div class="sp-company">Nvidia</div><div class="sp-title">GPU Engineer</div><div class="sp-salary">$350K</div><div class="sp-location">Santa Clara, CA</div></div>
+    <div class="salary-pill"><div class="sp-company">Stripe</div><div class="sp-title">Backend Engineer</div><div class="sp-salary">$290K</div><div class="sp-location">Remote</div></div>
+    <div class="salary-pill"><div class="sp-company">Netflix</div><div class="sp-title">Senior SWE</div><div class="sp-salary">$520K</div><div class="sp-location">Los Angeles, CA</div></div>
+    <div class="add-salary-pill"><i class="fas fa-plus"></i> Add Salary</div>
+  </div>
+</section>
+
+<section class="explore-section">
+  <h2>Explore By Levels</h2>
+  <div class="explore-grid">
+    <div class="explore-card"><i class="fas fa-code"></i><div class="ec-title">Software Engineer</div><div class="ec-sub">2.4M salaries</div></div>
+    <div class="explore-card"><i class="fas fa-microchip"></i><div class="ec-title">Hardware Engineer</div><div class="ec-sub">128K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-pencil-ruler"></i><div class="ec-title">Product Designer</div><div class="ec-sub">94K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-chart-line"></i><div class="ec-title">Product Manager</div><div class="ec-sub">215K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-database"></i><div class="ec-title">Data Scientist</div><div class="ec-sub">180K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-users-cog"></i><div class="ec-title">Eng Manager</div><div class="ec-sub">76K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-handshake"></i><div class="ec-title">Sales</div><div class="ec-sub">112K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-chart-bar"></i><div class="ec-title">Business Analyst</div><div class="ec-sub">67K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-shield-alt"></i><div class="ec-title">Security Engineer</div><div class="ec-sub">42K salaries</div></div>
+    <div class="explore-card"><i class="fas fa-cloud"></i><div class="ec-title">DevOps</div><div class="ec-sub">38K salaries</div></div>
+  </div>
+</section>
+
+<section class="employers-section">
+  <div class="employers-grid">
+    <div class="employer-card"><div class="ec-icon blue"><i class="fas fa-chart-simple"></i></div><h3>Compensation Benchmarking</h3><p>Use our in-depth salary data to learn about competitors' compensation practices.</p><div class="ec-link">Learn more <i class="fas fa-arrow-right"></i></div></div>
+    <div class="employer-card"><div class="ec-icon purple"><i class="fas fa-users"></i></div><h3>Talent Pool</h3><p>Hiring? The easiest way to hire top senior tech talent.</p><div class="ec-link">Explore talent <i class="fas fa-arrow-right"></i></div></div>
+    <div class="employer-card"><div class="ec-icon teal"><i class="fas fa-file-contract"></i></div><h3>Interactive Offers</h3><p>Create dynamic, personalized offer letters that showcase your total compensation package.</p><div class="ec-link">Get started <i class="fas fa-arrow-right"></i></div></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <div class="footer-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4,7 12,3 20,7" /><polyline points="4,12 12,8 20,12" /><polyline points="4,17 12,13 20,17" /></svg> Levels.fyi</div>
+      <p>© 2017-2026 Levels Fyi Inc.</p>
+      <a href="#" class="footer-app-btn"><i class="fas fa-download"></i> Download the App</a>
+      <br/><br/><a href="#"><i class="fas fa-robot"></i> AI Summary</a>
+    </div>
+    <div class="footer-col">
+      <h4>Levels.fyi</h4>
+      <a href="index.html">Home</a><a href="#">Job Board</a><a href="#">Compensation</a><a href="#">Salary Heatmap</a><a href="calculator.html">Salary Calculator</a><a href="#">Benefits</a><a href="#">Verified Salaries</a><a href="#">Internship Salaries</a><a href="#">H-1B Salaries</a><a href="#">2025 Pay Report</a><a href="leaderboard.html">Top Paying Companies</a><a href="#">API, MCP, CLI</a><a href="#">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contribute</h4>
+      <a href="#">Add Compensation</a><a href="#">Add Benefits</a><a href="#">Add Level Mapping</a>
+      <h4 style="margin-top:20px;">Popular Pages</h4>
+      <a href="salaries.html">Software Engineer Salary</a><a href="#">Data Scientist Salary</a><a href="#">Product Manager Salary</a><a href="#">Business Analyst Salary</a><a href="#">Software Engineer Jobs</a>
+    </div>
+    <div class="footer-col">
+      <h4>Community</h4>
+      <a href="#">Who's Hiring?</a><a href="#">Blog</a><a href="#">Press</a><a href="#">Terms</a><a href="#">Privacy Policy</a>
+      <p style="margin-top:20px;font-size:11px;">Logos provided by Logo.dev</p>
+    </div>
+  </div>
+  <div class="footer-bottom"><span>Change</span> &middot; <a href="#" style="color:#999;">Download the App</a></div>
+</footer>
+
+<script>
+  document.querySelectorAll('.industry-tab').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.industry-tab').forEach(x => x.classList.remove('active')); t.classList.add('active'); }); });
+  document.querySelectorAll('.job-family-tab').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.job-family-tab').forEach(x => x.classList.remove('active')); t.classList.add('active'); }); });
+  document.querySelectorAll('.toggle-btn').forEach(t => { t.addEventListener('click', () => { document.querySelectorAll('.toggle-btn').forEach(x => x.classList.remove('active')); t.classList.add('active'); }); });
+  document.querySelectorAll('.company-btn').forEach(t => { t.addEventListener('click', () => { if (!t.classList.contains('more')) t.classList.toggle('active'); }); });
+</script>
+
+</body>
+</html>

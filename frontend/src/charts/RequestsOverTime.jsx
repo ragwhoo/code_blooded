@@ -54,6 +54,8 @@ export default function RequestsOverTime({ data: propData, loading }) {
           <YAxis tick={{ fill: 'rgba(255,255,255,0.35)', fontSize: 10, fontWeight: 600 }} axisLine={{ stroke: 'rgba(255,255,255,0.01)' }} tickLine={false} />
           <Tooltip
             contentStyle={{ backgroundColor: '#111827', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '12px', color: '#FFFFFF', fontSize: '12px', fontWeight: 700, boxShadow: '0 8px 24px rgba(0,0,0,0.35)', padding: '12px' }}
+            itemStyle={{ color: '#FFFFFF' }}
+            labelStyle={{ color: '#FFFFFF' }}
           />
           <Area type="monotone" dataKey="total" stroke="#6C63FF" strokeWidth={2.5} fill="url(#totalGrad)" dot={false} activeDot={{ r: 4, fill: '#6C63FF', stroke: 'transparent', strokeWidth: 0 }} />
           <Area type="monotone" dataKey="bot" stroke="#F59E0B" strokeWidth={2} fill="url(#botGrad)" dot={false} activeDot={{ r: 4, fill: '#F59E0B', stroke: 'transparent', strokeWidth: 0 }} />
