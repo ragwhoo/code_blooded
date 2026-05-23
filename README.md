@@ -270,6 +270,15 @@ Score = 100 → TEMP_BLOCK → IP blocklisted in Redis (24h)
 [Next request from same IP] → 403 Forbidden
 ```
 
+## Deployed URLs (Railway)
+
+| Service | URL |
+|---------|-----|
+| **Frontend** (Sphinx Dashboard) | [https://frontend-production-2633.up.railway.app](https://frontend-production-2633.up.railway.app) |
+| **Target-11** (Levels.fyi clone) | [https://target-11-production.up.railway.app](https://target-11-production.up.railway.app) |
+| **Backend** (Spring Boot API) | [https://backend-production-9344c.up.railway.app](https://backend-production-9344c.up.railway.app) |
+| **Redis** | internal only (`redis.railway.internal:6379`) |
+
 ## License
 
 MIT
