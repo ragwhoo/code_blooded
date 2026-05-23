@@ -2,6 +2,9 @@ package com.botguard.interceptor;
 
 import com.botguard.event.EventBusService;
 import com.botguard.features.FeatureExtractionService;
+import com.botguard.features.CrawlerWhitelistService;
+import com.botguard.features.BrowserFingerprintService;
+import com.botguard.features.Ja3FingerprintService;
 import com.botguard.heuristics.HeuristicScoringService;
 import com.botguard.mitigation.MitigationEngine;
 import com.botguard.model.*;
@@ -34,6 +37,15 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Autowired
     private EventBusService eventBusService;
 
+    @Autowired
+    private CrawlerWhitelistService crawlerWhitelistService;
+
+    @Autowired
+    private BrowserFingerprintService browserFingerprintService;
+
+    @Autowired
+    private Ja3FingerprintService ja3FingerprintService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String sessionId = getOrCreateSessionId(request, response);
@@ -43,37 +55,65 @@ public class RequestInterceptor implements HandlerInterceptor {
         request.setAttribute("sessionId", sessionId);
         request.setAttribute("startTime", startTime);
 
+        String userAgent = request.getHeader("User-Agent");
+        Ja3FingerprintService.Ja3Result ja3 = ja3FingerprintService.analyze(userAgent);
+        request.setAttribute("ja3Hash", ja3.hash());
+        request.setAttribute("ja3Client", ja3.clientName());
+        if (ja3.suspicionScore() > 0) {
+            log.info("[SECURITY] [JA3] Suspicious TLS fingerprint: client={}, hash={}", ja3.clientName(), ja3.hash());
+        }
+
+        if (crawlerWhitelistService.isWhitelisted(userAgent)) {
+            log.debug("Whitelisted crawler detected: {} - bypassing scoring", userAgent);
+            request.setAttribute("bypassed", true);
+            request.setAttribute("riskLevel", RiskLevel.NORMAL);
+            request.setAttribute("riskScore", 0);
+            request.setAttribute("mitigationAction", MitigationAction.ALLOW);
+            response.setHeader("X-BotGuard-Whitelisted", "true");
+            return true;
+        }
+
         featureExtractionService.asyncProcess(sessionId, request.getRequestURI());
 
         FeatureSnapshot snapshot = featureExtractionService.extractFeatures(sessionId);
         SessionInfo sessionInfo = buildSessionInfo(sessionId, ip, request.getRequestURI());
 
         BotScore botScore = heuristicScoringService.score(snapshot, sessionInfo);
-        sessionInfo.setScore(botScore.score());
-        sessionInfo.setRiskLevel(botScore.riskLevel());
+        double effectiveScore = Math.min(botScore.score() + ja3.suspicionScore(), 100);
+        RiskLevel effectiveLevel = RiskLevel.fromScore((int) effectiveScore);
+        sessionInfo.setScore((int) effectiveScore);
+        sessionInfo.setRiskLevel(effectiveLevel);
 
         String fingerprint = botScore.breakdown() != null
                 ? botScore.breakdown().toString()
                 : null;
 
-        MitigationAction action = mitigationEngine.evaluate(botScore.score(), sessionId, ip, fingerprint);
+        MitigationAction action = mitigationEngine.evaluate(effectiveScore, sessionId, ip, fingerprint);
         sessionInfo.setMitigationAction(action);
 
-        // Apply response-level effects (headers, status codes, delays)
+        request.setAttribute("riskLevel", effectiveLevel);
+        request.setAttribute("riskScore", (int) effectiveScore);
+
+        response.setHeader("X-BotGuard-Score", String.valueOf((int) effectiveScore));
+        response.setHeader("X-BotGuard-Level", effectiveLevel.name());
+
         applyResponseEffects(action, request, response, botScore);
 
-        // Publish unified event to EventBus (all listeners process it)
         Map<String, Object> payload = new HashMap<>();
-        payload.put("riskScore", botScore.score());
-        payload.put("level", botScore.riskLevel().name());
+        payload.put("riskScore", effectiveScore);
+        payload.put("level", effectiveLevel.name());
         payload.put("mitigationAction", action.name());
         payload.put("ipAddress", ip);
         payload.put("fingerprint", fingerprint);
-        payload.put("userAgent", request.getHeader("User-Agent"));
+        payload.put("userAgent", userAgent);
         payload.put("path", request.getRequestURI());
         payload.put("method", request.getMethod());
 
-        SeverityLevel severity = SeverityLevel.fromScore(botScore.score());
+        if (!browserFingerprintService.hasValidFingerprint(sessionId)) {
+            payload.put("noBrowserFingerprint", true);
+        }
+
+        SeverityLevel severity = SeverityLevel.fromScore((int) effectiveScore);
         EnvelopeEvent envelope = new EnvelopeEvent(EventType.DETECTION, sessionId, severity, payload);
         eventBusService.publish(envelope);
 

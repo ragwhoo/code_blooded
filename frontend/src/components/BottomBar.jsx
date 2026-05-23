@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { Shield, Activity } from 'lucide-react'
+import { useRef, useEffect } from 'react'
 import RiskBadge from './RiskBadge'
 
 export default function Footer({ events = [], stats, connected }) {
@@ -7,6 +8,20 @@ export default function Footer({ events = [], stats, connected }) {
   const totalBlocked = stats?.blockedRequests || 0
   const totalRequests = stats?.totalRequests || 0
   const blockRate = totalRequests > 0 ? ((totalBlocked / totalRequests) * 100).toFixed(1) : '0.0'
+  const scrollRef = useRef(null)
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    el.style.scrollbarWidth = 'none'
+    el.style.msOverflowStyle = 'none'
+    const style = document.createElement('style')
+    style.id = 'hide-scrollbar-' + Math.random().toString(36).slice(2)
+    style.textContent = `.${style.id}::-webkit-scrollbar { display: none; }`
+    document.head.appendChild(style)
+    el.classList.add(style.id)
+    return () => { const s = document.getElementById(style.id); if (s) s.remove() }
+  }, [])
 
   return (
     <div className="w-full mt-8 flex items-center px-6 gap-6 rounded-3xl h-[72px]"
@@ -33,8 +48,8 @@ export default function Footer({ events = [], stats, connected }) {
         </div>
       </div>
 
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <div ref={scrollRef} className="flex items-center gap-1 overflow-x-auto">
           <span className="text-[10px] font-bold text-white/35 uppercase tracking-wider whitespace-nowrap mr-2">Threats</span>
           <AnimatePresence mode="popLayout">
             {threats.length === 0 ? (
@@ -43,9 +58,9 @@ export default function Footer({ events = [], stats, connected }) {
               threats.slice(0, 10).map((threat, i) => (
                 <motion.div
                   key={(threat.timestamp || '') + i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                   className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg whitespace-nowrap"
                   style={{ background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.05)' }}

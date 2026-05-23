@@ -74,5 +74,8 @@ body {
 .stat-value { transition: all 0.3s ease; }
 .card-transition { transition: all 0.3s ease; }
 
+.hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.55s ease-out, transform 0.55s ease-out; }
 .revealed { opacity: 1; transform: translateY(0); }
