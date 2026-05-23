@@ -81,15 +81,6 @@ public class HoneypotController {
         return serveHoneypotResponse(request);
     }
 
-    @RequestMapping("/**")
-    public ResponseEntity<String> dynamicHoneypot(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        if (honeypotService.isHoneypotPath(path)) {
-            return serveHoneypotResponse(request);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @GetMapping("/api/honeypots/stats")
     public ResponseEntity<?> getHoneypotStats() {
         return ResponseEntity.ok(honeypotAnalyticsService.getStats());
